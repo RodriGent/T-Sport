@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-SPORT - Tienda Deportiva</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        :root {
+            --color-primario: #00aeff;
+            --color-primario-hover: #0099cc;
+            --color-secundario: #000000;
+            --color-texto: #ffffff;
+            --color-fondo: #0a0a0a;
+            --color-borde: #00aeff;
+            --color-hover: #0099cc;
+            --color-exito: #00ff88;
+            --color-error: #ff4444;
+            --color-advertencia: #ffaa00;
+            --color-info: #00aeff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--color-secundario) 0%, #1a1a1a 100%);
+            color: var(--color-texto);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* HEADER CON LOGO Y NAVEGACIÓN HORIZONTAL */
+        header {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 1rem 2rem;
+            border-bottom: 3px solid var(--color-primario);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-section:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            border: 3px solid var(--color-primario);
+            background: linear-gradient(45deg, var(--color-primario), #00ffaa);
+            box-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
+        }
+        
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--color-primario), #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(0, 174, 255, 0.7);
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .boton-menu {
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-secundario);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 174, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .boton-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .boton-menu:hover::before {
+            left: 100%;
+        }
+        
+        .boton-menu:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 174, 255, 0.5);
+            background: linear-gradient(135deg, var(--color-primario-hover), var(--color-primario));
+        }
+        
+        .boton-menu.active {
+            background: linear-gradient(135deg, #00ffaa, var(--color-primario));
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.7);
+        }
+        
+        .numerito {
+            background: var(--color-secundario);
+            color: var(--color-primario);
+            padding: 0.3rem 0.6rem;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 900;
+            border: 2px solid var(--color-primario);
+            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+        
+        /* CONTENIDO PRINCIPAL */
+        main {
+            flex: 1;
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .titulo-principal {
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, var(--color-primario), #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(0, 174, 255, 0.5);
+            position: relative;
+        }
+        
+        .titulo-principal::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primario), #00ffaa);
+            border-radius: 2px;
+        }
+        
+        .contenedor-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+        
+        .producto {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        
+        .producto::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--color-primario), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            border-radius: 20px;
+        }
+        
+        .producto:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 174, 255, 0.3);
+            border: 2px solid var(--color-primario);
+        }
+        
+        .producto:hover::before {
+            opacity: 0.1;
+        }
+        
+        .producto-imagen {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .producto:hover .producto-imagen {
+            transform: scale(1.1);
+        }
+        
+        .producto-detalles {
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .producto-titulo {
+            font-size: 1.4rem;
+            color: var(--color-primario);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+        
+        .producto-precio {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--color-texto);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .producto-disponible {
+            font-size: 1rem;
+            color: #00ffaa;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .producto-agregar {
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-secundario);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 174, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .producto-agregar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .producto-agregar:hover::before {
+            left: 100%;
+        }
+        
+        .producto-agregar:hover {
+            background: linear-gradient(135deg, var(--color-primario-hover), var(--color-primario));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 174, 255, 0.6);
+        }
+        
+        .producto-agotado {
+            background: linear-gradient(135deg, #666, #999);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .producto-agotado:hover {
+            transform: none;
+            box-shadow: 0 4px 15px rgba(102, 102, 102, 0.4);
+        }
+        
+        /* SECCIÓN INFORMACIÓN CORPORATIVA */
+        .info-corporativa {
+            margin: 4rem 0;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 25px;
+            border: 2px solid var(--color-primario);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 174, 255, 0.2);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, rgba(0, 174, 255, 0.15), rgba(0, 255, 170, 0.1));
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-primario);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 174, 255, 0.3);
+        }
+        
+        .info-card h3 {
+            color: var(--color-primario);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+        
+        .info-card p {
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            color: var(--color-texto);
+        }
+        
+        .valores-lista {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+        
+        .valores-lista li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        
+        .valores-lista li:hover {
+            background: rgba(0, 174, 255, 0.1);
+        }
+        
+        .valores-lista li i {
+            color: var(--color-primario);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+        
+        /* BOTONES FLOTANTES */
+        .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
+            position: fixed;
+            bottom: 2rem;
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-secundario);
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 174, 255, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: flotar 3s ease-in-out infinite;
+        }
+        
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .flotante-pago-btn {
+            right: 2rem;
+        }
+        
+        .flotante-redes-btn {
+            right: 9rem;
+        }
+        
+        .flotante-info-btn {
+            right: 16rem;
+        }
+        
+        .flotante-maps-btn {
+            right: 23rem;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+        
+        .flotante-maps-btn:hover {
+            background: linear-gradient(135deg, #cc0000, #ff4444);
+        }
+        
+        .flotante-pago-btn:hover, .flotante-redes-btn:hover, .flotante-info-btn:hover, .flotante-maps-btn:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 174, 255, 0.7);
+            animation: none;
+        }
+        
+        /* MODALES */
+        .modal-pago, .modal-redes, .modal-info, .modal-maps {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-pago.mostrar, .modal-redes.mostrar, .modal-info.mostrar, .modal-maps.mostrar {
+            display: flex;
+            animation: aparecer 0.3s ease;
+        }
+        
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .modal-contenido {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--color-primario);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0, 174, 255, 0.3);
+        }
+        
+        .modal-maps .modal-contenido {
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .mapa-contenedor {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--color-primario);
+            margin-top: 1rem;
+        }
+        
+        .mapa-contenedor iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .cerrar-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .cerrar-modal:hover {
+            color: var(--color-primario);
+            transform: scale(1.2);
+        }
+        
+        .modal-contenido h3 {
+            margin-bottom: 2rem;
+            color: var(--color-primario);
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(0, 174, 255, 0.5);
+        }
+        
+        .metodo-pago-item, .redes-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .metodo-pago-item:hover, .redes-item:hover {
+            background: rgba(0, 174, 255, 0.1);
+        }
+        
+        .imglogo-pagos {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 2px solid var(--color-primario);
+        }
+        
+        .metodo-info, .redes-info {
+            flex: 1;
+        }
+        
+        .metodo-info strong, .redes-info strong {
+            color: var(--color-primario);
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+        
+        .link-redes {
+            color: var(--color-primario);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+        
+        .link-redes:hover {
+            color: var(--color-secundario);
+            background: var(--color-primario);
+            border-color: var(--color-primario);
+            box-shadow: 0 0 15px rgba(0, 174, 255, 0.5);
+        }
+        
+        /* FOOTER */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 2rem;
+            border-top: 3px solid var(--color-primario);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .texto-footer {
+            margin-bottom: 1rem;
+            color: var(--color-texto);
+            font-size: 1.1rem;
+        }
+        
+        .contenedor-bolivia {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .imglogo-bolivia {
+            width: 40px;
+            height: 25px;
+            object-fit: contain;
+            border-radius: 5px;
+            border: 1px solid var(--color-primario);
+        }
+        
+        .lugar {
+            color: var(--color-primario);
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+        
+        /* EFECTOS ESPECIALES */
+        .particulas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particula {
+            position: absolute;
+            background: var(--color-primario);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: flotar-particula 20s linear infinite;
+        }
+        
+        @keyframes flotar-particula {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .logo-text {
+                font-size: 2rem;
+            }
+            
+            .contenedor-productos {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .flotante-pago-btn {
+                right: 1.5rem;
+            }
+            
+            .flotante-redes-btn {
+                right: 7rem;
+            }
+            
+            .flotante-info-btn {
+                right: 12.5rem;
+            }
+            
+            .flotante-maps-btn {
+                right: 18rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            main {
+                padding: 2rem 1rem;
+            }
+            
+            .titulo-principal {
+                font-size: 2.5rem;
+            }
+            
+            .contenedor-productos {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .nav-menu {
+                gap: 1rem;
+            }
+            
+            .boton-menu {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.8rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-contenido {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+                bottom: 1rem;
+            }
+            
+            .flotante-pago-btn {
+                right: 1rem;
+            }
+            
+            .flotante-redes-btn {
+                right: 6rem;
+            }
+            
+            .flotante-info-btn {
+                right: 11rem;
+            }
+            
+            .flotante-maps-btn {
+                right: 16rem;
+            }
+            
+            .modal-maps .modal-contenido {
+                max-width: 95%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .titulo-principal {
+                font-size: 2rem;
+            }
+            
+            .producto-detalles {
+                padding: 1.5rem;
+            }
+            
+            .info-corporativa {
+                padding: 2rem 1.5rem;
+            }
+            
+            .flotante-info-btn, .flotante-maps-btn {
+                display: none;
+            }
+            
+            .mapa-contenedor {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PARTÍCULAS DE FONDO -->
+    <div class="particulas" id="particulas"></div>
+    
+    <div class="wrapper">
+        <!-- HEADER CON LOGO Y MENÚ HORIZONTAL -->
+        <header>
+            <div class="header-container">
+                <div class="logo-section">
+                    <img class="logo-img" src="img/logo/logo1.png.jpg" alt="T-SPORT Logo">
+                    <h1 class="logo-text">T-SPORT</h1>
+                </div>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li>
+                            <button class="boton-menu active" data-categoria="todos">
+                                <i class="bi bi-house-door-fill"></i> INICIO
+                            </button>
+                        </li>
+                        <li>
+                            <button class="boton-menu" data-categoria="todos">
+                                <i class="bi bi-grid-3x3-gap-fill"></i> TODOS
+                            </button>
+                        </li>
+                        <li>
+                            <button class="boton-menu" data-categoria="chaquetas">
+                                <i class="bi bi-jacket"></i> CHAQUETAS
+                            </button>
+                        </li>
+                        <li>
+                            <button class="boton-menu" data-categoria="busos">
+                                <i class="bi bi-person-standing-dress"></i> BUSOS
+                            </button>
+                        </li>
+                        <li>
+                            <button class="boton-menu" data-categoria="shorts">
+                                <i class="bi bi-shorts"></i> SHORTS
+                            </button>
+                        </li>
+                        <li>
+                            <button class="boton-menu" data-categoria="conjuntos">
+                                <i class="bi bi-collection"></i> CONJUNTOS
+                            </button>
+                        </li>
+                        <li>
+                            <a class="boton-menu" href="carrito.html">
+                                <i class="bi bi-cart-fill"></i> CARRITO <span id="numerito" class="numerito">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- CONTENIDO PRINCIPAL -->
+        <main>
+            <h2 class="titulo-principal" id="titulo-principal">PRODUCTOS DESTACADOS</h2>
+            
+            <div id="contenedor-productos" class="contenedor-productos">
+                <!-- Los productos se cargarán dinámicamente con JavaScript -->
+            </div>
+            
+            <!-- SECCIÓN INFORMACIÓN CORPORATIVA -->
+            <section class="info-corporativa">
+                <h2 class="titulo-principal">SOBRE T-SPORT</h2>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Misión</h3>
+                        <p>Proveer equipamiento deportivo de calidad que impulse el rendimiento y bienestar de nuestros clientes, promoviendo un estilo de vida activo y saludable.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>Visión</h3>
+                        <p>Ser la tienda deportiva líder en Bolivia, reconocida por nuestra calidad, innovación y compromiso con el desarrollo deportivo nacional.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>Nuestros Valores</h3>
+                        <ul class="valores-lista">
+                            <li><i class="bi bi-check-circle-fill"></i> Calidad garantizada en todos nuestros productos</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Compromiso con el cliente</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Innovación constante</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Responsabilidad social</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Pasión por el deporte</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>¿Por qué elegirnos?</h3>
+                        <p>En T-SPORT nos diferenciamos por:</p>
+                        <ul class="valores-lista">
+                            <li><i class="bi bi-star-fill"></i> Productos testados y certificados</li>
+                            <li><i class="bi bi-star-fill"></i> Precios competitivos</li>
+                            <li><i class="bi bi-star-fill"></i> Asesoramiento especializado</li>
+                            <li><i class="bi bi-star-fill"></i> Garantía en todos los productos</li>
+                            <li><i class="bi bi-star-fill"></i> Envíos a todo Bolivia</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>Compromiso Social</h3>
+                        <p>En T-SPORT creemos en el poder transformador del deporte. Por eso:</p>
+                        <ul class="valores-lista">
+                            <li><i class="bi bi-heart-fill"></i> Apoyamos a equipos locales</li>
+                            <li><i class="bi bi-heart-fill"></i> Donamos equipamiento a escuelas</li>
+                            <li><i class="bi bi-heart-fill"></i> Organizamos eventos deportivos</li>
+                            <li><i class="bi bi-heart-fill"></i> Promovemos el deporte femenino</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-content">
+                <p class="texto-footer">© 2025 T-SPORT - Tienda Deportiva - Potencia tu rendimiento</p>
+                <div class="contenedor-bolivia">
+                    <img class="imglogo-bolivia" src="img/logo/bolivia.png" alt="Bolivia">
+                    <p class="lugar">EL ALTO - BOLIVIA</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- BOTONES FLOTANTES -->
+    <button class="flotante-pago-btn" onclick="abrirModalPago()">
+        <i class="bi bi-cash-coin"></i>
+    </button>
+
+    <button class="flotante-redes-btn" onclick="abrirModalRedes()">
+        <i class="bi bi-globe2"></i>
+    </button>
+
+    <button class="flotante-info-btn" onclick="abrirModalInfo()">
+        <i class="bi bi-info-circle"></i>
+    </button>
+
+    <button class="flotante-maps-btn" onclick="abrirModalMaps()">
+        <i class="bi bi-geo-alt-fill"></i>
+    </button>
+
+    <!-- MODALES -->
+    <div id="modalPago" class="modal-pago">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalPago()">×</button>
+            <h3>Métodos de Pago</h3>
+            <div class="metodo-pago-item">
+                <img class="imglogo-pagos" src="img/logo/yape.png" alt="Yape">
+                <div class="metodo-info">
+                    <strong>Yape</strong>
+                    <p>Pago rápido con QR</p>
+                    <small>Escanea el código en la página de pago</small>
+                </div>
+            </div>
+            <div class="metodo-pago-item">
+                <img class="imglogo-pagos" src="img/logo/trans.jpg" alt="Transferencia">
+                <div class="metodo-info">
+                    <strong>Transferencia Bancaria</strong>
+                    <p>Pago seguro por transferencia</p>
+                    <small>Datos bancarios al finalizar compra</small>
+                </div>
+            </div>
+            <div class="metodo-pago-item">
+                <img class="imglogo-pagos" src="img/logo/efec.png" alt="Efectivo">
+                <div class="metodo-info">
+                    <strong>Efectivo</strong>
+                    <p>Pago al momento de la entrega</p>
+                    <small>Solo disponible en El Alto</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRedes" class="modal-redes">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalRedes()">×</button>
+            <h3>Síguenos en nuestras Redes</h3>
+            
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/facebook.png" alt="Facebook">
+                <div class="redes-info">
+                    <strong>Facebook</strong>
+                    <p>T-SPORT Oficial</p>
+                    <a href="https://facebook.com/t-sport" target="_blank" class="link-redes">Visitar página</a>
+                </div>
+            </div>
+            
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/instagram.png" alt="Instagram">
+                <div class="redes-info">
+                    <strong>Instagram</strong>
+                    <p>@t_sport_oficial</p>
+                    <a href="https://instagram.com/t_sport_oficial" target="_blank" class="link-redes">Seguir cuenta</a>
+                </div>
+            </div>
+            
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/tiktok.png" alt="TikTok">
+                <div class="redes-info">
+                    <strong>TikTok</strong>
+                    <p>@t_sport</p>
+                    <a href="https://tiktok.com/@t_sport" target="_blank" class="link-redes">Ver videos</a>
+                </div>
+            </div>
+
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/whatsaap.png" alt="WhatsApp">
+                <div class="redes-info">
+                    <strong>WhatsApp</strong>
+                    <p>+591 63199147</p>
+                    <a href="https://wa.me/59163199147" target="_blank" class="link-redes">Contactar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalInfo" class="modal-info">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalInfo()">×</button>
+            <h3>Información de Contacto</h3>
+            
+            <div class="info-card" style="margin-bottom: 1.5rem; border-left: 5px solid #00ffaa;">
+                <h3>Horarios de Atención</h3>
+                <p><strong>Lunes a Viernes:</strong> 9:00 AM - 8:00 PM</p>
+                <p><strong>Sábados:</strong> 9:00 AM - 6:00 PM</p>
+                <p><strong>Domingos:</strong> 10:00 AM - 2:00 PM</p>
+            </div>
+            
+            <div class="info-card" style="margin-bottom: 1.5rem; border-left: 5px solid #00aeff;">
+                <h3>Contacto</h3>
+                <p><strong>Teléfono:</strong> +591 63199147</p>
+                <p><strong>WhatsApp:</strong> +591 63199147</p>
+                <p><strong>Email:</strong> info@t-sport.com</p>
+            </div>
+            
+            <div class="info-card" style="border-left: 5px solid #ffaa00;">
+                <h3>Ubicación</h3>
+                <p><strong>Dirección:</strong> Calle Mexico #3830, Zona El Progreso</p>
+                <p><strong>Ciudad:</strong> El Alto, Bolivia</p>
+                <p><strong>Envíos:</strong> A todo El Alto</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE MAPA CORREGIDO -->
+    <div id="modalMaps" class="modal-maps">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalMaps()">×</button>
+            <h3>Ubicación de T-SPORT</h3>
+            <p style="text-align: center; margin-bottom: 1rem;">Visítanos en nuestra tienda física</p>
+            
+            <div class="mapa-contenedor">
+                <!-- Mapa corregido con coordenadas específicas para El Alto, Bolivia -->
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.671835882151!2d-68.15938892468606!3d-16.50499968378777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915f206b1d7e03c5%3A0x8e1d9c9b0e8a3a3b!2sEl%20Alto%2C%20Bolivia!5e0!3m2!1ses!2sbo!4v1641234567890!5m2!1ses!2sbo" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <p><strong>Dirección:</strong> Calle Mexico #3830, Zona El Progreso, El Alto, Bolivia</p>
+                <p><strong>Horario:</strong> Lunes a Viernes 9:00 AM - 8:00 PM</p>
+                <a href="https://maps.app.goo.gl/2yxE8MJCG3v9EByf7" 
+                   target="_blank" 
+                   class="link-redes" 
+                   style="display: inline-block; margin-top: 1rem;">
+                    <i class="bi bi-geo-alt-fill"></i> Abrir en Google Maps
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <!-- JavaScript principal integrado -->
+    <script>
+        // ==================== SISTEMA DE SEGURIDAD Y SINCRONIZACIÓN ====================
+        const SEGURIDAD = {
+            PRECIO_MINIMO: 10,
+            CANTIDAD_MAXIMA: 10,
+            CANTIDAD_MINIMA: 1,
+            IDS_PERMITIDOS: [
+                "chaqueta-01", "chaqueta-02", "chaqueta-03", "chaqueta-04", "chaqueta-05",
+                "buso-01", "buso-02", "buso-03", "buso-04", "buso-05", "buso-06",
+                "short-01", "short-02", "short-03", "short-04", "short-05",
+                "conjunto-01", "conjunto-02", "conjunto-03", "conjunto-04", "conjunto-05", "conjunto-06", "conjunto-07"
+            ]
+        };
+
+        let productos = [];
+        let productosEnCarrito = [];
+
+        // FUNCIÓN DE VALIDACIÓN DE PRODUCTOS
+        function validarProductoSeguro(producto) {
+            if (producto.precio < SEGURIDAD.PRECIO_MINIMO) {
+                console.error("🚨 Intento de manipulación - Precio muy bajo:", producto);
+                return false;
+            }
+            
+            if (producto.cantidad < SEGURIDAD.CANTIDAD_MINIMA || producto.cantidad > SEGURIDAD.CANTIDAD_MAXIMA) {
+                console.error("🚨 Intento de manipulación - Cantidad inválida:", producto);
+                return false;
+            }
+            
+            if (!SEGURIDAD.IDS_PERMITIDOS.includes(producto.id)) {
+                console.error("🚨 Intento de manipulación - ID no válido:", producto);
+                return false;
+            }
+            
+            return true;
+        }
+
+        // SANITIZAR DATOS DEL CARRITO
+        function sanitizarCarrito() {
+            let carrito = JSON.parse(localStorage.getItem("productos-en-carrito") || "[]");
+            
+            // Filtrar solo productos válidos
+            carrito = carrito.filter(producto => validarProductoSeguro(producto));
+            
+            // Asegurar precios mínimos
+            carrito = carrito.map(producto => ({
+                ...producto,
+                precio: Math.max(producto.precio, SEGURIDAD.PRECIO_MINIMO)
+            }));
+            
+            localStorage.setItem("productos-en-carrito", JSON.stringify(carrito));
+            return carrito;
+        }
+
+        // ==================== CÓDIGO PRINCIPAL ====================
+        const contenedorProductos = document.querySelector("#contenedor-productos");
+        const tituloPrincipal = document.querySelector("#titulo-principal");
+        const numerito = document.querySelector("#numerito");
+
+        // DATOS DE PRODUCTOS T-SPORT
+        const productosTSport = [
+            {
+                "id": "chaqueta-01",
+                "titulo": "Chaqueta Deportiva ",
+                "precio": 75,
+                "imagen": "img/chaquetas/01.jpg",
+                "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
+                "disponible": 10
+            },
+            {
+                "id": "chaqueta-02",
+                "titulo": "Chaqueta Deportiva Negra",
+                "precio": 80,
+                "imagen": "img/chaquetas/02.jpg",
+                "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
+                "disponible": 8
+            },
+            {
+                "id": "chaqueta-03",
+                "titulo": "Chaqueta Impermeable",
+                "precio": 75,
+                "imagen": "img/chaquetas/03.jpg",
+                "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
+                "disponible": 5
+            },
+            {
+                "id": "chaqueta-04",
+                "titulo": "Chaqueta Deportiva Adidas",
+                "precio": 86,
+                "imagen": "img/chaquetas/04.jpg",
+                "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
+                "disponible": 7
+            },
+            {
+                "id": "chaqueta-05",
+                "titulo": "Chaqueta Deportiva Combinada",
+                "precio": 70,
+                "imagen": "img/chaquetas/05.jpg",
+                "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
+                "disponible": 6
+            },
+            {
+                "id": "buso-01",
+                "titulo": "Buso Deportivo Adidas en Negro",
+                "precio": 75,
+                "imagen": "img/busos/01.jpg",
+                "categoria": {"id": "busos", "nombre": "Busos"},
+                "disponible": 12
+            },
+            {
+                "id": "buso-02",
+                "titulo": "Buso Deportivo Nike",
+                "precio": 70,
+                "imagen": "img/busos/02.jpg",
+                "categoria": {"id": "busos", "nombre": "Busos"},
+                "disponible": 10
+            },
+            {
+                "id": "buso-03",
+                "titulo": "Buso Nike Normal",
+                "precio": 85,
+                "imagen": "img/busos/03.jpg",
+                "categoria": {"id": "busos", "nombre": "Busos"},
+                "disponible": 8
+            },
+            {
+                "id": "buso-04",
+                "titulo": "Buso Deportivo Nike con detalles",
+                "precio": 38,
+                "imagen": "img/busos/04.jpg",
+                "categoria": {"id": "busos", "nombre": "Busos"},
+                "disponible": 9
+            },
+            {
+                "id": "buso-05",
+                "titulo": "Buso Deportivo Yhogher Jordan",
+                "precio": 65,
+                "imagen": "img/busos/05.jpg",
+                "categoria": {"id": "busos", "nombre": "Busos"},
+                "disponible": 11
+            },
+            {
+                "id": "buso-06",
+                "titulo": "Buso Deportivo Adidas Sencillo",
+                "precio": 75,
+                "imagen": "img/busos/06.jpg",
+                "categoria": {"id": "busos", "nombre": "Busos"},
+                "disponible": 7
+            },
+            {
+                "id": "short-01",
+                "titulo": "Short Deportivo Negro Dama",
+                "precio": 25,
+                "imagen": "img/shorts/01.jpg",
+                "categoria": {"id": "shorts", "nombre": "Shorts"},
+                "disponible": 15
+            },
+            {
+                "id": "short-02",
+                "titulo": "Short Deportivo Nike Dama",
+                "precio": 28,
+                "imagen": "img/shorts/02.jpg",
+                "categoria": {"id": "shorts", "nombre": "Shorts"},
+                "disponible": 12
+            },
+            {
+                "id": "short-03",
+                "titulo": "Short Deportivo Adidas ",
+                "precio": 26,
+                "imagen": "img/shorts/03.jpg",
+                "categoria": {"id": "shorts", "nombre": "Shorts"},
+                "disponible": 10
+            },
+            {
+                "id": "short-04",
+                "titulo": "Short Deportivo Jordan Negro",
+                "precio": 27,
+                "imagen": "img/shorts/04.jpg",
+                "categoria": {"id": "shorts", "nombre": "Shorts"},
+                "disponible": 14
+            },
+            {
+                "id": "short-05",
+                "titulo": "Short Deportivo Gris Nike",
+                "precio": 24,
+                "imagen": "img/shorts/05.jpg",
+                "categoria": {"id": "shorts", "nombre": "Shorts"},
+                "disponible": 18
+            },
+            {
+                "id": "conjunto-01",
+                "titulo": "Conjunto Deportivo Negro",
+                "precio": 65,
+                "imagen": "img/conjuntos/01.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 8
+            },
+            {
+                "id": "conjunto-02",
+                "titulo": "Conjunto Deportivo Azul Combinado",
+                "precio": 70,
+                "imagen": "img/conjuntos/02.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 6
+            },
+            {
+                "id": "conjunto-03",
+                "titulo": "Conjunto Deportivo Nike Combinado",
+                "precio": 68,
+                "imagen": "img/conjuntos/03.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 7
+            },
+            {
+                "id": "conjunto-04",
+                "titulo": "Conjunto Deportivo Adidas",
+                "precio": 62,
+                "imagen": "img/conjuntos/04.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 9
+            },
+            {
+                "id": "conjunto-05",
+                "titulo": "Conjunto Innovacion Nike",
+                "precio": 75,
+                "imagen": "img/conjuntos/05.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 5
+            },
+            {
+                "id": "conjunto-06",
+                "titulo": "Conjunto Deportivo Negro Combinado",
+                "precio": 72,
+                "imagen": "img/conjuntos/06.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 4
+            },
+            {
+                "id": "conjunto-07",
+                "titulo": "Conjunto Deportivo Blanco con Detalles",
+                "precio": 69,
+                "imagen": "img/conjuntos/07.jpg",
+                "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
+                "disponible": 6
+            }
+        ];
+
+        // INICIALIZAR PRODUCTOS
+        function inicializarProductos() {
+            productos = productosTSport;
+            
+            productosEnCarrito = sanitizarCarrito();
+            
+            cargarProductos(productos);
+            actualizarNumerito();
+            crearParticulas();
+        }
+
+        // CREAR PARTÍCULAS DE FONDO
+        function crearParticulas() {
+            const contenedor = document.getElementById('particulas');
+            for (let i = 0; i < 50; i++) {
+                const particula = document.createElement('div');
+                particula.className = 'particula';
+                particula.style.width = Math.random() * 5 + 2 + 'px';
+                particula.style.height = particula.style.width;
+                particula.style.left = Math.random() * 100 + 'vw';
+                particula.style.animationDelay = Math.random() * 20 + 's';
+                particula.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                contenedor.appendChild(particula);
+            }
+        }
+
+        // FILTRADO POR CATEGORÍAS
+        document.querySelectorAll('.boton-menu[data-categoria]').forEach(boton => {
+            boton.addEventListener('click', function() {
+                const categoria = this.getAttribute('data-categoria');
+                filtrarProductos(categoria);
+                
+                // Actualizar botones activos
+                document.querySelectorAll('.boton-menu').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        function filtrarProductos(categoria) {
+            let productosFiltrados = productos;
+            
+            // Cambiar título según categoría
+            switch(categoria) {
+                case 'todos':
+                    tituloPrincipal.textContent = 'TODOS LOS PRODUCTOS';
+                    break;
+                case 'chaquetas':
+                    tituloPrincipal.textContent = 'CHAQUETAS DEPORTIVAS';
+                    productosFiltrados = productos.filter(p => p.categoria.id === 'chaquetas');
+                    break;
+                case 'busos':
+                    tituloPrincipal.textContent = 'BUSOS DEPORTIVOS';
+                    productosFiltrados = productos.filter(p => p.categoria.id === 'busos');
+                    break;
+                case 'shorts':
+                    tituloPrincipal.textContent = 'SHORTS DEPORTIVOS';
+                    productosFiltrados = productos.filter(p => p.categoria.id === 'shorts');
+                    break;
+                case 'conjuntos':
+                    tituloPrincipal.textContent = 'CONJUNTOS DEPORTIVOS';
+                    productosFiltrados = productos.filter(p => p.categoria.id === 'conjuntos');
+                    break;
+                default:
+                    tituloPrincipal.textContent = 'PRODUCTOS DESTACADOS';
+            }
+            
+            cargarProductos(productosFiltrados);
+        }
+
+        function cargarProductos(productosElegidos) {
+            contenedorProductos.innerHTML = "";
+
+            productosElegidos.forEach(producto => {
+                const div = document.createElement("div");
+                div.classList.add("producto");
+                div.setAttribute("data-categoria", producto.categoria.id);
+
+                div.innerHTML = `
+                    <img class="producto-imagen" src="${producto.imagen}" alt="${producto.titulo}">
+                    <div class="producto-detalles">
+                        <h3 class="producto-titulo">${producto.titulo}</h3>
+                        <p class="producto-precio">Bs. ${producto.precio}</p>
+                        <p class="producto-disponible">Disponible: ${producto.disponible}</p>
+                        <button class="producto-agregar ${producto.disponible === 0 ? 'producto-agotado' : ''}" 
+                            id="${producto.id}">
+                            ${producto.disponible === 0 ? 'Agotado' : 'Agregar al Carrito'}
+                        </button>
+                    </div>
+                `;
+
+                contenedorProductos.append(div);
+            });
+
+            actualizarBotonesAgregar();
+        }
+
+        function actualizarBotonesAgregar() {
+            const botonesAgregar = document.querySelectorAll(".producto-agregar");
+
+            botonesAgregar.forEach(boton => {
+                boton.removeEventListener("click", agregarAlCarrito);
+                if (!boton.classList.contains('producto-agotado')) {
+                    boton.addEventListener("click", agregarAlCarrito);
+                }
+            });
+        }
+
+        function actualizarNumerito() {
+            let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0);
+            if (numerito) {
+                numerito.innerText = nuevoNumerito;
+            }
+        }
+
+        // FUNCIÓN AGREGAR AL CARRITO
+        function agregarAlCarrito(e) {
+            const idBoton = e.currentTarget.id;
+            
+            const productoAgregado = productos.find(producto => producto.id === idBoton);
+
+            if (!productoAgregado || productoAgregado.disponible <= 0) {
+                Swal.fire({
+                    title: 'Producto agotado',
+                    text: 'Lo sentimos, este producto no está disponible en este momento',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return;
+            }
+            
+            Toastify({
+                text: "Producto agregado al carrito",
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                  background: "linear-gradient(135deg, var(--color-primario), var(--color-primario-hover))",
+                  borderRadius: "15px",
+                  textTransform: "uppercase",
+                  fontSize: ".9rem",
+                  fontWeight: "bold",
+                  boxShadow: "0 5px 15px rgba(0, 174, 255, 0.5)"
+                },
+                offset: {
+                    x: '2rem', 
+                    y: '2rem' 
+                }
+            }).showToast();
+
+            if(productosEnCarrito.some(producto => producto.id === idBoton)) {
+                const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
+                if (productosEnCarrito[index].cantidad < SEGURIDAD.CANTIDAD_MAXIMA) {
+                    productosEnCarrito[index].cantidad++;
+                } else {
+                    Toastify({
+                        text: "Límite máximo alcanzado",
+                        duration: 2000,
+                        style: {
+                            background: "linear-gradient(135deg, var(--color-error), #ff6666)",
+                            borderRadius: "15px"
+                        }
+                    }).showToast();
+                    return;
+                }
+            } else {
+                const productoParaCarrito = {...productoAgregado};
+                productoParaCarrito.cantidad = 1;
+                productosEnCarrito.push(productoParaCarrito);
+            }
+
+            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+            actualizarNumerito();
+            
+            // RECARGAR PRODUCTOS PARA ACTUALIZAR INTERFAZ
+            const categoriaActiva = document.querySelector(".boton-menu.active");
+            if (categoriaActiva) {
+                const categoria = categoriaActiva.getAttribute('data-categoria');
+                filtrarProductos(categoria);
+            }
+        }
+
+        // FUNCIONALIDAD DE MODALES
+        function abrirModalPago() {
+            document.getElementById('modalPago').classList.add('mostrar');
+        }
+
+        function cerrarModalPago() {
+            document.getElementById('modalPago').classList.remove('mostrar');
+        }
+
+        function abrirModalRedes() {
+            document.getElementById('modalRedes').classList.add('mostrar');
+        }
+
+        function cerrarModalRedes() {
+            document.getElementById('modalRedes').classList.remove('mostrar');
+        }
+
+        function abrirModalInfo() {
+            document.getElementById('modalInfo').classList.add('mostrar');
+        }
+
+        function cerrarModalInfo() {
+            document.getElementById('modalInfo').classList.remove('mostrar');
+        }
+
+        function abrirModalMaps() {
+            document.getElementById('modalMaps').classList.add('mostrar');
+        }
+
+        function cerrarModalMaps() {
+            document.getElementById('modalMaps').classList.remove('mostrar');
+        }
+
+        // Cerrar modales al hacer click fuera
+        document.getElementById('modalPago')?.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalPago();
+        });
+
+        document.getElementById('modalRedes')?.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalRedes();
+        });
+
+        document.getElementById('modalInfo')?.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalInfo();
+        });
+
+        document.getElementById('modalMaps')?.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalMaps();
+        });
+
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("🚀 T-SPORT - Página cargada con éxito");
+            inicializarProductos();
+            
+            // PROTECCIÓN EN TIEMPO REAL
+            setInterval(() => {
+                productosEnCarrito = sanitizarCarrito();
+                actualizarNumerito();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

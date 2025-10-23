@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - T-SPORT</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        :root {
+            --color-primario: #00aeff;
+            --color-primario-hover: #0099cc;
+            --color-secundario: #000000;
+            --color-texto: #ffffff;
+            --color-fondo: #0a0a0a;
+            --color-borde: #00aeff;
+            --color-hover: #0099cc;
+            --color-exito: #00ff88;
+            --color-error: #ff4444;
+            --color-advertencia: #ffaa00;
+            --color-info: #00aeff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--color-secundario) 0%, #1a1a1a 100%);
+            color: var(--color-texto);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* PARTÍCULAS DE FONDO */
+        .particulas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particula {
+            position: absolute;
+            background: var(--color-primario);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: flotar-particula 20s linear infinite;
+        }
+        
+        @keyframes flotar-particula {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* ========== HEADER FORMULARIO ========== */
+        .formulario-header {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.95));
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--color-primario);
+            box-shadow: 0 10px 30px rgba(0, 174, 255, 0.3);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+            animation: slideIn 1s ease forwards;
+            opacity: 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .formulario-header .imglogo {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            border: 3px solid var(--color-primario);
+            background: linear-gradient(45deg, var(--color-primario), #00ffaa);
+            box-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
+        }
+
+        .formulario-header .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--color-primario), #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(0, 174, 255, 0.7);
+            margin: 0;
+        }
+
+        /* ========== FORMULARIO PRINCIPAL ========== */
+        .slide-form { 
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            width: 450px;
+            max-width: 90vw;
+            overflow: hidden;
+            animation: slideIn 1s ease forwards;
+            transform: translateY(50px);
+            opacity: 0;
+            box-shadow: 0 20px 50px rgba(0, 174, 255, 0.2);
+            border: 2px solid var(--color-primario);
+            backdrop-filter: blur(10px);
+            margin-top: 120px;
+            margin-bottom: 100px;
+        }
+
+        @keyframes slideIn { 
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            } 
+        }
+
+        .slide-form h2 {
+            text-align: center;
+            background: linear-gradient(45deg, var(--color-primario), #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .slide-form h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primario), #00ffaa);
+            border-radius: 2px;
+        }
+
+        .slide-form input, .slide-form textarea { 
+            width: 100%; 
+            padding: 15px;
+            margin-top: 1rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            color: var(--color-texto);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .slide-form input::placeholder, .slide-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .slide-form input:focus, .slide-form textarea:focus {
+            outline: none;
+            border: 2px solid var(--color-primario);
+            box-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .pago { 
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-secundario);
+            text-decoration: none;
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            padding: 15px;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 174, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pago::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .pago:hover::before {
+            left: 100%;
+        }
+
+        .pago:hover {
+            background: linear-gradient(135deg, var(--color-primario-hover), var(--color-primario));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 174, 255, 0.6);
+        }
+
+        /* ========== FOOTER FORMULARIO ========== */
+        .formulario-footer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.95));
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--color-primario);
+            box-shadow: 0 10px 30px rgba(0, 174, 255, 0.3);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+            animation: slideIn 1s ease forwards;
+            opacity: 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .formulario-footer .texto-footer {
+            color: var(--color-texto);
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .formulario-footer .contenedor-bolivia {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .formulario-footer .lugar {
+            color: var(--color-primario);
+            font-size: 0.8rem;
+            margin: 0;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+
+        .formulario-footer .imglogo-bolivia {
+            width: 25px;
+            height: 16px;
+            border-radius: 3px;
+            border: 1px solid var(--color-primario);
+        }
+
+        /* ========== BOTONES FLOTANTES ========== */
+        .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn {
+            position: fixed;
+            bottom: 2rem;
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-secundario);
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 174, 255, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: flotar 3s ease-in-out infinite;
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .flotante-pago-btn {
+            right: 2rem;
+        }
+
+        .flotante-redes-btn {
+            right: 9rem;
+        }
+
+        .flotante-info-btn {
+            right: 16rem;
+        }
+
+        .flotante-pago-btn:hover, .flotante-redes-btn:hover, .flotante-info-btn:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 174, 255, 0.7);
+            animation: none;
+        }
+
+        /* ========== MODALES ========== */
+        .modal-pago, .modal-redes, .modal-info {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-pago.mostrar, .modal-redes.mostrar, .modal-info.mostrar {
+            display: flex;
+            animation: aparecer 0.3s ease;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-contenido {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--color-primario);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0, 174, 255, 0.3);
+        }
+
+        .cerrar-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .cerrar-modal:hover {
+            color: var(--color-primario);
+            transform: scale(1.2);
+        }
+
+        .modal-contenido h3 {
+            margin-bottom: 2rem;
+            color: var(--color-primario);
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(0, 174, 255, 0.5);
+        }
+
+        .metodo-pago-item, .redes-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .metodo-pago-item:hover, .redes-item:hover {
+            background: rgba(0, 174, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .imglogo-pagos {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 10px;
+            border: 2px solid var(--color-primario);
+        }
+
+        .metodo-info, .redes-info {
+            flex: 1;
+        }
+
+        .metodo-info strong, .redes-info strong {
+            color: var(--color-primario);
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .link-redes {
+            color: var(--color-primario);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+
+        .link-redes:hover {
+            color: var(--color-secundario);
+            background: var(--color-primario);
+            border-color: var(--color-primario);
+            box-shadow: 0 0 15px rgba(0, 174, 255, 0.5);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media screen and (max-width: 768px) {
+            .formulario-header {
+                top: 10px;
+                padding: 0.8rem 1.5rem;
+            }
+            
+            .formulario-header .imglogo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .formulario-header .logo {
+                font-size: 1.8rem;
+            }
+            
+            .slide-form {
+                margin-top: 100px;
+                margin-bottom: 80px;
+                padding: 2rem;
+            }
+            
+            .slide-form h2 {
+                font-size: 1.8rem;
+            }
+            
+            .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+                bottom: 1.5rem;
+            }
+            
+            .flotante-pago-btn {
+                right: 1.5rem;
+            }
+            
+            .flotante-redes-btn {
+                right: 7rem;
+            }
+            
+            .flotante-info-btn {
+                right: 12.5rem;
+            }
+            
+            .formulario-footer {
+                bottom: 10px;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .formulario-header .logo {
+                font-size: 1.5rem;
+            }
+            
+            .slide-form {
+                width: 95vw;
+                padding: 1.5rem;
+            }
+            
+            .slide-form h2 {
+                font-size: 1.5rem;
+            }
+            
+            .flotante-info-btn {
+                display: none;
+            }
+            
+            .modal-contenido {
+                padding: 2rem;
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PARTÍCULAS DE FONDO -->
+    <div class="particulas" id="particulas"></div>
+
+    <div class="formulario-header">
+        <div class="header-content">
+            <img class="imglogo" src="img/logo/logo1.png.jpg" alt="T-SPORT Logo">
+            <h1 class="logo">T-SPORT</h1>
+        </div>
+    </div>
+
+    <form id="formularioCompra">
+        <div class="slide-form"> 
+            <h2>Formulario de Pedido</h2> 
+
+            <input type="text" name="from_name" required placeholder="Tu nombre completo">
+            
+            <input type="email" name="from_email" required placeholder="Tu correo electrónico">
+            
+            <input type="tel" name="from_phone" required placeholder="Tu número de teléfono">
+            
+            <textarea name="message" cols="30" rows="5" placeholder="Comentarios adicionales"></textarea>
+
+            <!-- CAMPOS OCULTOS PARA PRODUCTOS Y TOTAL -->
+            <input type="hidden" name="productos" id="productosCarrito">
+            <input type="hidden" name="total" id="totalPedido">
+
+            <button type="submit" class="pago">
+                <i class="bi bi-send-check-fill"></i> Confirmar Pedido
+            </button>
+        </div> 
+    </form>
+    
+    <div class="formulario-footer">
+        <div class="footer-content">
+            <p class="texto-footer">© 2025 T-SPORT - Potencia tu rendimiento</p>
+            <div class="contenedor-bolivia">
+                <img class="imglogo-bolivia" src="img/logo/bolivia.png" alt="Bolivia">
+                <p class="lugar">EL ALTO - BOLIVIA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTONES FLOTANTES -->
+    <button class="flotante-pago-btn" onclick="abrirModalPago()">
+        <i class="bi bi-cash-coin"></i>
+    </button>
+
+    <button class="flotante-redes-btn" onclick="abrirModalRedes()">
+        <i class="bi bi-globe2"></i>
+    </button>
+
+    <button class="flotante-info-btn" onclick="abrirModalInfo()">
+        <i class="bi bi-info-circle"></i>
+    </button>
+
+    <!-- MODALES -->
+    <div id="modalPago" class="modal-pago">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalPago()">×</button>
+            <h3>💳 Métodos de Pago</h3>
+            <div class="metodo-pago-item">
+                <img class="imglogo-pagos" src="img/logo/yape.png" alt="Yape">
+                <div class="metodo-info">
+                    <strong>Yape</strong>
+                    <p>Pago rápido con QR</p>
+                    <small>Escanea el código en la página de pago</small>
+                </div>
+            </div>
+            <div class="metodo-pago-item">
+                <img class="imglogo-pagos" src="img/logo/trans.jpg" alt="Transferencia">
+                <div class="metodo-info">
+                    <strong>Transferencia Bancaria</strong>
+                    <p>Pago seguro por transferencia</p>
+                    <small>Datos bancarios al finalizar compra</small>
+                </div>
+            </div>
+            <div class="metodo-pago-item">
+                <img class="imglogo-pagos" src="img/logo/efec.png" alt="Efectivo">
+                <div class="metodo-info">
+                    <strong>Efectivo</strong>
+                    <p>Pago al momento de la entrega</p>
+                    <small>Solo disponible en El Alto</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRedes" class="modal-redes">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalRedes()">×</button>
+            <h3>🌐 Síguenos en Redes</h3>
+            
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/facebook.png" alt="Facebook">
+                <div class="redes-info">
+                    <strong>Facebook</strong>
+                    <p>T-SPORT Oficial</p>
+                    <a href="https://facebook.com/t-sport" target="_blank" class="link-redes">Visitar página</a>
+                </div>
+            </div>
+            
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/instagram.png" alt="Instagram">
+                <div class="redes-info">
+                    <strong>Instagram</strong>
+                    <p>@t_sport_oficial</p>
+                    <a href="https://instagram.com/t_sport_oficial" target="_blank" class="link-redes">Seguir cuenta</a>
+                </div>
+            </div>
+            
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/tiktok.png" alt="TikTok">
+                <div class="redes-info">
+                    <strong>TikTok</strong>
+                    <p>@t_sport</p>
+                    <a href="https://tiktok.com/@t_sport" target="_blank" class="link-redes">Ver videos</a>
+                </div>
+            </div>
+
+            <div class="redes-item">
+                <img class="imglogo-pagos" src="img/logo/whatsaap.png" alt="WhatsApp">
+                <div class="redes-info">
+                    <strong>WhatsApp</strong>
+                    <p>+591 63199147</p>
+                    <a href="https://wa.me/59163199147" target="_blank" class="link-redes">Contactar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalInfo" class="modal-info">
+        <div class="modal-contenido">
+            <button class="cerrar-modal" onclick="cerrarModalInfo()">×</button>
+            <h3>ℹ️ Información de Contacto</h3>
+            
+            <div class="info-contacto" style="margin-bottom: 1.5rem; border-left: 5px solid #00ffaa;">
+                <h3>🕒 Horarios de Atención</h3>
+                <p><strong>Lunes a Viernes:</strong> 9:00 AM - 8:00 PM</p>
+                <p><strong>Sábados:</strong> 9:00 AM - 6:00 PM</p>
+                <p><strong>Domingos:</strong> 10:00 AM - 2:00 PM</p>
+            </div>
+            
+            <div class="info-contacto" style="margin-bottom: 1.5rem; border-left: 5px solid #00aeff;">
+                <h3>📱 Contacto</h3>
+                <p><strong>Teléfono:</strong> +591 63199147</p>
+                <p><strong>WhatsApp:</strong> +591 63199147</p>
+                <p><strong>Email:</strong> tsport945@gmail.com</p>
+            </div>
+            
+            <div class="info-contacto" style="border-left: 5px solid #ffaa00;">
+                <h3>📍 Ubicación</h3>
+                <p><strong>Dirección:</strong> calle mexico #3830, Zona El Progreso</p>
+                <p><strong>Ciudad:</strong> El Alto, Bolivia</p>
+                <p><strong>Envíos:</strong> A todo el alto</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        // CREAR PARTÍCULAS DE FONDO
+        function crearParticulas() {
+            const contenedor = document.getElementById('particulas');
+            for (let i = 0; i < 50; i++) {
+                const particula = document.createElement('div');
+                particula.className = 'particula';
+                particula.style.width = Math.random() * 5 + 2 + 'px';
+                particula.style.height = particula.style.width;
+                particula.style.left = Math.random() * 100 + 'vw';
+                particula.style.animationDelay = Math.random() * 20 + 's';
+                particula.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                contenedor.appendChild(particula);
+            }
+        }
+
+        // INICIALIZAR EMAILJS CON TUS NUEVAS CREDENCIALES
+        (function() {
+            emailjs.init("bWhczpJ4jgTyRImBi"); // Tu nueva Public Key
+        })();
+
+        // ==================== SISTEMA DE SEGURIDAD FORMULARIO ====================
+        const SEGURIDAD_FORM = {
+            MAX_INTENTOS: 3,
+            TIEMPO_ESPERA: 30000,
+            intentos: 0,
+            ultimoEnvio: 0
+        };
+
+        // VALIDAR PRODUCTOS ANTES DE ENVIAR
+        function validarProductosFormulario() {
+            const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
+            
+            if (productos.length === 0) {
+                Swal.fire({
+                    title: '🛒 Carrito vacío',
+                    text: 'Agrega productos al carrito antes de enviar el formulario',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return false;
+            }
+            
+            return true;
+        }
+
+        // VALIDAR FORMULARIO COMPLETO
+        function validarFormularioCompleto(nombre, correo, telefono) {
+            if (nombre.trim().length < 3) {
+                Swal.fire({
+                    title: 'Nombre muy corto',
+                    text: 'Por favor ingresa tu nombre completo',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return false;
+            }
+            
+            if (!correo.includes('@') || !correo.includes('.')) {
+                Swal.fire({
+                    title: 'Email inválido',
+                    text: 'Por favor ingresa un email válido',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return false;
+            }
+            
+            if (telefono.trim().length < 8) {
+                Swal.fire({
+                    title: 'Teléfono inválido',
+                    text: 'Por favor ingresa un número de teléfono válido',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return false;
+            }
+            
+            SEGURIDAD_FORM.intentos++;
+            if (SEGURIDAD_FORM.intentos > SEGURIDAD_FORM.MAX_INTENTOS) {
+                Swal.fire({
+                    title: 'Demasiados intentos',
+                    text: 'Por favor espera 30 segundos antes de intentar nuevamente',
+                    icon: 'error',
+                    confirmButtonText: 'Entendido',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return false;
+            }
+            
+            const ahora = Date.now();
+            if (ahora - SEGURIDAD_FORM.ultimoEnvio < 5000) {
+                Swal.fire({
+                    title: 'Espera un momento',
+                    text: 'Por favor espera 5 segundos entre envíos',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                    background: 'var(--color-secundario)',
+                    color: 'var(--color-texto)',
+                    confirmButtonColor: 'var(--color-primario)'
+                });
+                return false;
+            }
+            SEGURIDAD_FORM.ultimoEnvio = ahora;
+            
+            return true;
+        }
+
+        // CARGAR PRODUCTOS AL INICIAR
+        document.addEventListener('DOMContentLoaded', function() {
+            crearParticulas();
+            
+            const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
+            console.log("🛒 Productos en carrito:", productos);
+            
+            document.getElementById('productosCarrito').value = JSON.stringify(productos);
+            const total = productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+            document.getElementById('totalPedido').value = `Bs. ${total.toFixed(2)}`;
+            
+            console.log("💰 Total del pedido:", total);
+        });
+
+        // ENVÍO SEGURO DEL FORMULARIO
+        document.getElementById('formularioCompra').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.querySelector('input[name="from_name"]').value;
+            const correo = document.querySelector('input[name="from_email"]').value;
+            const telefono = document.querySelector('input[name="from_phone"]').value;
+            const comentario = document.querySelector('textarea[name="message"]').value;
+            const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
+            const total = productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+            
+            console.log("📦 Productos a enviar:", productos);
+            console.log("💰 Total a enviar:", total);
+            console.log("📱 Teléfono a enviar:", telefono);
+            
+            if (!validarProductosFormulario()) return;
+            if (!validarFormularioCompleto(nombre, correo, telefono)) return;
+            
+            Swal.fire({
+                title: '¿Confirmar pedido T-SPORT?',
+                html: `
+                    <div style="text-align: left;">
+                        <p><strong>Productos deportivos:</strong></p>
+                        <ul>
+                            ${productos.map(p => `<li>${p.titulo} (x${p.cantidad}) - Bs. ${(p.precio * p.cantidad).toFixed(2)}</li>`).join('')}
+                        </ul>
+                        <p><strong>Total: Bs. ${total.toFixed(2)}</strong></p>
+                        <p><strong>Nombre:</strong> ${nombre}</p>
+                        <p><strong>Email:</strong> ${correo}</p>
+                        <p><strong>Teléfono:</strong> ${telefono}</p>
+                    </div>
+                `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, confirmar',
+                cancelButtonText: 'Revisar',
+                background: 'var(--color-secundario)',
+                color: 'var(--color-texto)',
+                confirmButtonColor: 'var(--color-primario)',
+                cancelButtonColor: 'var(--color-error)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    enviarPedido(nombre, correo, telefono, comentario, productos, total);
+                }
+            });
+        });
+
+        // FUNCIÓN PARA ENVIAR PEDIDO - CORREGIDA
+        function enviarPedido(nombre, correo, telefono, comentario, productos, total) {
+            console.log("📧 Iniciando envío con EmailJS...");
+            
+            // Formatear productos para el email
+            const productosTexto = productos.map(p => 
+                `${p.titulo} (x${p.cantidad}) - Bs. ${(p.precio * p.cantidad).toFixed(2)}`
+            ).join('\n');
+
+            const templateParams = {
+                from_name: nombre,
+                from_email: correo,
+                from_phone: telefono, // ✅ VARIABLE CORREGIDA
+                reply_to: correo,
+                message: comentario || 'Sin comentarios adicionales',
+                productos: productosTexto,
+                total: `Bs. ${total.toFixed(2)}`,
+                fecha: new Date().toLocaleString(),
+                tienda: 'T-SPORT'
+            };
+
+            console.log("📨 Parámetros a enviar:", templateParams);
+
+            // USANDO TUS NUEVOS SERVICE ID Y TEMPLATE ID
+            emailjs.send('service_dmwqrrm', 'template_jqhsowb', templateParams)
+                .then(function(response) {
+                    console.log('✅ Email enviado EXITOSAMENTE:', response);
+                    
+                    Swal.fire({
+                        title: '¡PEDIDO T-SPORT CONFIRMADO!',
+                        html: `
+                            <div style="text-align: left;">
+                                <p><strong>Gracias ${nombre}</strong></p>
+                                <p>📧 <strong>Email enviado exitosamente a tsport945@gmail.com</strong></p>
+                                <p>Te contactaremos pronto al correo:</p>
+                                <p><strong>${correo}</strong></p>
+                                <p>O al teléfono:</p>
+                                <p><strong>${telefono}</strong></p>
+                                <p>Total del pedido: <strong>Bs. ${total.toFixed(2)}</strong></p>
+                                <p>🛒 <strong>Redirigiendo al pago...</strong></p>
+                            </div>
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'Continuar al pago',
+                        background: 'var(--color-secundario)',
+                        color: 'var(--color-texto)',
+                        confirmButtonColor: 'var(--color-primario)'
+                    }).then(() => {
+                        // REDIRIGIR A LA PÁGINA DE PAGO
+                        window.location.href = 'pago.html';
+                    });
+                })
+                .catch(function(error) {
+                    console.error('❌ Error enviando email:', error);
+                    
+                    Swal.fire({
+                        title: 'Error al enviar',
+                        html: `
+                            <div style="text-align: left;">
+                                <p><strong>Lo sentimos ${nombre}</strong></p>
+                                <p>⚠ <strong>Hubo un error al enviar el mensaje.</strong></p>
+                                <p>Por favor, intenta nuevamente o contáctanos directamente:</p>
+                                <p><strong>WhatsApp: +591 63199147</strong></p>
+                            </div>
+                        `,
+                        icon: 'error',
+                        confirmButtonText: 'Entendido',
+                        background: 'var(--color-secundario)',
+                        color: 'var(--color-texto)',
+                        confirmButtonColor: 'var(--color-primario)'
+                    });
+                });
+        }
+
+        // ==================== FUNCIONALIDAD DE MODALES ====================
+        function abrirModalPago() {
+            document.getElementById('modalPago').classList.add('mostrar');
+        }
+
+        function cerrarModalPago() {
+            document.getElementById('modalPago').classList.remove('mostrar');
+        }
+
+        function abrirModalRedes() {
+            document.getElementById('modalRedes').classList.add('mostrar');
+        }
+
+        function cerrarModalRedes() {
+            document.getElementById('modalRedes').classList.remove('mostrar');
+        }
+
+        function abrirModalInfo() {
+            document.getElementById('modalInfo').classList.add('mostrar');
+        }
+
+        function cerrarModalInfo() {
+            document.getElementById('modalInfo').classList.remove('mostrar');
+        }
+
+        // Cerrar modales al hacer click fuera
+        document.getElementById('modalPago').addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalPago();
+        });
+
+        document.getElementById('modalRedes').addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalRedes();
+        });
+
+        document.getElementById('modalInfo').addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalInfo();
+        });
+
+        // INICIALIZAR
+        document.addEventListener('DOMContentLoaded', function() {
+            crearParticulas();
+            console.log("📝 Formulario T-SPORT cargado con efectos visuales");
+            console.log("📧 EmailJS configurado para: tsport945@gmail.com");
+        });
+    </script>
+</body>
+</html>
