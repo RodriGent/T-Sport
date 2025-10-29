@@ -41,15 +41,24 @@
             min-height: 100vh;
         }
         
-        /* HEADER CON LOGO Y NAVEGACIÓN HORIZONTAL */
+        /* HEADER FIJADO QUE SUBE CON EL SCROLL */
         header {
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.98);
             padding: 1rem 2rem;
             border-bottom: 3px solid var(--color-primario);
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            width: 100%;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        header.scrolled {
+            padding: 0.7rem 2rem;
+            background: rgba(0, 0, 0, 0.95);
         }
         
         .header-container {
@@ -72,16 +81,21 @@
         }
         
         .logo-img {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 15px;
             border: 3px solid var(--color-primario);
             background: linear-gradient(45deg, var(--color-primario), #00ffaa);
             box-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
         }
+
+        header.scrolled .logo-img {
+            width: 50px;
+            height: 50px;
+        }
         
         .logo-text {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 900;
             background: linear-gradient(45deg, var(--color-primario), #00ffaa);
             -webkit-background-clip: text;
@@ -89,20 +103,26 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             text-shadow: 0 0 30px rgba(0, 174, 255, 0.7);
+            transition: font-size 0.3s ease;
+        }
+
+        header.scrolled .logo-text {
+            font-size: 1.8rem;
         }
         
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1.2rem;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .boton-menu {
             background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
             color: var(--color-secundario);
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
@@ -111,10 +131,16 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             box-shadow: 0 4px 15px rgba(0, 174, 255, 0.3);
             position: relative;
             overflow: hidden;
+            white-space: nowrap;
+        }
+
+        header.scrolled .boton-menu {
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
         }
         
         .boton-menu::before {
@@ -146,18 +172,20 @@
         .numerito {
             background: var(--color-secundario);
             color: var(--color-primario);
-            padding: 0.3rem 0.6rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 50%;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 900;
             border: 2px solid var(--color-primario);
             box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+            min-width: 20px;
+            text-align: center;
         }
         
         /* CONTENIDO PRINCIPAL */
         main {
             flex: 1;
-            padding: 3rem 2rem;
+            padding: 8rem 2rem 3rem;
             max-width: 1400px;
             margin: 0 auto;
             width: 100%;
@@ -169,7 +197,7 @@
             background: linear-gradient(45deg, var(--color-primario), #00ffaa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -191,8 +219,8 @@
         
         .contenedor-productos {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
             margin-bottom: 4rem;
         }
         
@@ -204,6 +232,7 @@
             border: 2px solid transparent;
             backdrop-filter: blur(10px);
             position: relative;
+            cursor: pointer;
         }
         
         .producto::before {
@@ -231,7 +260,7 @@
         
         .producto-imagen {
             width: 100%;
-            height: 280px;
+            height: 250px;
             object-fit: cover;
             transition: transform 0.4s ease;
         }
@@ -241,13 +270,13 @@
         }
         
         .producto-detalles {
-            padding: 2rem;
+            padding: 1.5rem;
             position: relative;
             z-index: 2;
         }
         
         .producto-titulo {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--color-primario);
             margin-bottom: 0.8rem;
             font-weight: 700;
@@ -255,31 +284,42 @@
         }
         
         .producto-precio {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 900;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             color: var(--color-texto);
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
         .producto-disponible {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #00ffaa;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .producto-disponible.agotado {
+            color: var(--color-error);
+        }
+
+        .producto-disponible.poco-stock {
+            color: var(--color-advertencia);
         }
         
         .producto-agregar {
             background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
             color: var(--color-secundario);
             border: none;
-            padding: 1rem 2rem;
+            padding: 0.9rem 1.5rem;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 700;
             transition: all 0.3s ease;
             width: 100%;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(0, 174, 255, 0.4);
@@ -318,11 +358,368 @@
             transform: none;
             box-shadow: 0 4px 15px rgba(102, 102, 102, 0.4);
         }
+
+        /* MODAL DE DETALLES DEL PRODUCTO - RESPONSIVE */
+        .modal-detalles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            overflow-y: auto;
+        }
         
+        .modal-detalles.mostrar {
+            display: flex;
+            animation: aparecer 0.3s ease;
+        }
+        
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .modal-detalles-contenido {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 95%;
+            width: 100%;
+            max-width: 1000px;
+            border: 2px solid var(--color-primario);
+            position: relative;
+            max-height: 95vh;
+            overflow-y: auto;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0, 174, 255, 0.3);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .modal-detalles-contenido {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        .detalles-imagen {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid var(--color-primario);
+        }
+
+        @media (min-width: 768px) {
+            .detalles-imagen {
+                height: 400px;
+            }
+        }
+        
+        .detalles-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        
+        .detalles-titulo {
+            font-size: 1.8rem;
+            color: var(--color-primario);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+
+        @media (min-width: 768px) {
+            .detalles-titulo {
+                font-size: 2rem;
+            }
+        }
+        
+        .detalles-precio {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--color-texto);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .detalles-precio {
+                font-size: 2.5rem;
+            }
+        }
+
+        .detalles-disponible {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .detalles-disponible.disponible {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .detalles-disponible.agotado {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        .detalles-disponible.poco-stock {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+        }
+        
+        .detalles-caracteristicas {
+            margin-top: 0.5rem;
+        }
+        
+        .caracteristica-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            background: rgba(0, 174, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+        
+        .caracteristica-item:hover {
+            background: rgba(0, 174, 255, 0.2);
+        }
+        
+        .caracteristica-icono {
+            color: var(--color-primario);
+            font-size: 1.3rem;
+            width: 25px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+        
+        .caracteristica-texto {
+            flex: 1;
+        }
+        
+        .caracteristica-titulo {
+            font-weight: 700;
+            color: var(--color-primario);
+            margin-bottom: 0.3rem;
+            font-size: 1rem;
+        }
+        
+        .caracteristica-descripcion {
+            color: var(--color-texto);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .detalles-tallas {
+            margin-top: 1rem;
+        }
+        
+        .tallas-titulo {
+            font-weight: 700;
+            color: var(--color-primario);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .tallas-contenedor {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        
+        .talla-item {
+            padding: 0.7rem 1rem;
+            border: 2px solid var(--color-primario);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            background: transparent;
+            color: var(--color-texto);
+            font-size: 0.9rem;
+        }
+        
+        .talla-item:hover {
+            background: var(--color-primario);
+            color: var(--color-secundario);
+            transform: scale(1.05);
+        }
+        
+        .talla-item.seleccionada {
+            background: var(--color-primario);
+            color: var(--color-secundario);
+            box-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
+        }
+        
+        .detalles-colores {
+            margin-top: 1rem;
+        }
+        
+        .colores-titulo {
+            font-weight: 700;
+            color: var(--color-primario);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .colores-contenedor {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+        }
+        
+        .color-item {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .color-item {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        .color-item:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-item.seleccionado {
+            border-color: var(--color-texto);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-item::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
+            text-shadow: 0 0 3px rgba(0,0,0,0.8);
+        }
+        
+        .color-item.seleccionado::after {
+            opacity: 1;
+        }
+        
+        .detalles-botones {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-direction: column;
+        }
+
+        @media (min-width: 480px) {
+            .detalles-botones {
+                flex-direction: row;
+            }
+        }
+        
+        .boton-detalles {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .boton-agregar-detalles {
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-secundario);
+            box-shadow: 0 4px 15px rgba(0, 174, 255, 0.4);
+        }
+        
+        .boton-agregar-detalles:hover {
+            background: linear-gradient(135deg, var(--color-primario-hover), var(--color-primario));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 174, 255, 0.6);
+        }
+
+        .boton-agregar-detalles:disabled {
+            background: linear-gradient(135deg, #666, #999);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(102, 102, 102, 0.4);
+        }
+        
+        .boton-cerrar-detalles {
+            background: linear-gradient(135deg, #666, #999);
+            color: var(--color-texto);
+        }
+        
+        .boton-cerrar-detalles:hover {
+            background: linear-gradient(135deg, #777, #aaa);
+            transform: translateY(-2px);
+        }
+        
+        .cerrar-modal-detalles {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: var(--color-texto);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cerrar-modal-detalles:hover {
+            color: var(--color-primario);
+            transform: scale(1.2);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
         /* SECCIÓN INFORMACIÓN CORPORATIVA */
         .info-corporativa {
             margin: 4rem 0;
-            padding: 3rem;
+            padding: 2.5rem;
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
             border-radius: 25px;
             border: 2px solid var(--color-primario);
@@ -332,14 +729,14 @@
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
             margin-top: 2rem;
         }
         
         .info-card {
             background: linear-gradient(135deg, rgba(0, 174, 255, 0.15), rgba(0, 255, 170, 0.1));
-            padding: 2rem;
+            padding: 1.8rem;
             border-radius: 15px;
             border-left: 5px solid var(--color-primario);
             transition: transform 0.3s ease;
@@ -353,31 +750,33 @@
         
         .info-card h3 {
             color: var(--color-primario);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
         }
         
         .info-card p {
-            line-height: 1.7;
+            line-height: 1.6;
             margin-bottom: 1rem;
             color: var(--color-texto);
+            font-size: 0.95rem;
         }
         
         .valores-lista {
             list-style: none;
-            margin-top: 1.5rem;
+            margin-top: 1.2rem;
         }
         
         .valores-lista li {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.7rem;
             padding: 0.5rem;
             border-radius: 8px;
             transition: background 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .valores-lista li:hover {
@@ -386,51 +785,96 @@
         
         .valores-lista li i {
             color: var(--color-primario);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
         }
         
         /* BOTONES FLOTANTES */
         .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
             position: fixed;
-            bottom: 2rem;
+            bottom: 1.5rem;
             background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
             color: var(--color-secundario);
             border: none;
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 8px 25px rgba(0, 174, 255, 0.5);
             transition: all 0.3s ease;
-            z-index: 1000;
+            z-index: 999;
             animation: flotar 3s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+                bottom: 1rem;
+            }
         }
         
         @keyframes flotar {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
         
         .flotante-pago-btn {
-            right: 2rem;
+            right: 1.5rem;
         }
         
         .flotante-redes-btn {
-            right: 9rem;
+            right: 8rem;
         }
         
         .flotante-info-btn {
-            right: 16rem;
+            right: 14.5rem;
         }
         
         .flotante-maps-btn {
-            right: 23rem;
+            right: 21rem;
             background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+
+        @media (max-width: 1200px) {
+            .flotante-pago-btn {
+                right: 1.5rem;
+            }
+            
+            .flotante-redes-btn {
+                right: 7rem;
+            }
+            
+            .flotante-info-btn {
+                right: 12.5rem;
+            }
+            
+            .flotante-maps-btn {
+                right: 18rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flotante-pago-btn {
+                right: 1rem;
+            }
+            
+            .flotante-redes-btn {
+                right: 6rem;
+            }
+            
+            .flotante-info-btn {
+                display: none;
+            }
+            
+            .flotante-maps-btn {
+                display: none;
+            }
         }
         
         .flotante-maps-btn:hover {
@@ -456,6 +900,7 @@
             align-items: center;
             z-index: 2000;
             backdrop-filter: blur(10px);
+            padding: 1rem;
         }
         
         .modal-pago.mostrar, .modal-redes.mostrar, .modal-info.mostrar, .modal-maps.mostrar {
@@ -463,17 +908,12 @@
             animation: aparecer 0.3s ease;
         }
         
-        @keyframes aparecer {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
         .modal-contenido {
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            padding: 3rem;
+            padding: 2rem;
             border-radius: 20px;
             max-width: 500px;
-            width: 90%;
+            width: 100%;
             border: 2px solid var(--color-primario);
             position: relative;
             max-height: 90vh;
@@ -484,16 +924,22 @@
         
         .modal-maps .modal-contenido {
             max-width: 800px;
-            padding: 2rem;
+            padding: 1.5rem;
         }
         
         .mapa-contenedor {
             width: 100%;
-            height: 400px;
+            height: 300px;
             border-radius: 15px;
             overflow: hidden;
             border: 2px solid var(--color-primario);
             margin-top: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .mapa-contenedor {
+                height: 400px;
+            }
         }
         
         .mapa-contenedor iframe {
@@ -504,26 +950,33 @@
         
         .cerrar-modal {
             position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: none;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
             border: none;
             color: var(--color-texto);
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .cerrar-modal:hover {
             color: var(--color-primario);
             transform: scale(1.2);
+            background: rgba(0, 0, 0, 0.9);
         }
         
         .modal-contenido h3 {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: var(--color-primario);
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             text-shadow: 0 0 15px rgba(0, 174, 255, 0.5);
         }
@@ -531,8 +984,8 @@
         .metodo-pago-item, .redes-item {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            padding: 1.5rem;
+            gap: 1.2rem;
+            padding: 1.2rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: background 0.3s ease;
             border-radius: 10px;
@@ -543,8 +996,8 @@
         }
         
         .imglogo-pagos {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             border-radius: 10px;
             border: 2px solid var(--color-primario);
@@ -557,8 +1010,18 @@
         .metodo-info strong, .redes-info strong {
             color: var(--color-primario);
             display: block;
-            margin-bottom: 0.8rem;
-            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .metodo-info p, .redes-info p {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .metodo-info small, .redes-info small {
+            font-size: 0.8rem;
+            color: #ccc;
         }
         
         .link-redes {
@@ -566,9 +1029,12 @@
             text-decoration: none;
             font-weight: 700;
             transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 8px;
             border: 1px solid transparent;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 0.5rem;
         }
         
         .link-redes:hover {
@@ -595,7 +1061,7 @@
         .texto-footer {
             margin-bottom: 1rem;
             color: var(--color-texto);
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .contenedor-bolivia {
@@ -606,8 +1072,8 @@
         }
         
         .imglogo-bolivia {
-            width: 40px;
-            height: 25px;
+            width: 35px;
+            height: 22px;
             object-fit: contain;
             border-radius: 5px;
             border: 1px solid var(--color-primario);
@@ -615,7 +1081,7 @@
         
         .lugar {
             color: var(--color-primario);
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             text-shadow: 0 0 10px rgba(0, 174, 255, 0.5);
         }
@@ -644,74 +1110,61 @@
             100% { transform: translateY(-100px) rotate(360deg); }
         }
         
-        /* RESPONSIVE */
+        /* RESPONSIVE GENERAL */
         @media (max-width: 1200px) {
             .header-container {
                 flex-direction: column;
-                gap: 1.5rem;
+                gap: 1.2rem;
             }
             
             .nav-menu {
-                flex-wrap: wrap;
                 justify-content: center;
+                gap: 1rem;
             }
             
             .logo-text {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .contenedor-productos {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            }
-            
-            .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-            
-            .flotante-pago-btn {
-                right: 1.5rem;
-            }
-            
-            .flotante-redes-btn {
-                right: 7rem;
-            }
-            
-            .flotante-info-btn {
-                right: 12.5rem;
-            }
-            
-            .flotante-maps-btn {
-                right: 18rem;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
         }
         
         @media (max-width: 768px) {
             header {
-                padding: 1rem;
+                padding: 0.8rem 1rem;
+            }
+
+            header.scrolled {
+                padding: 0.5rem 1rem;
             }
             
             main {
-                padding: 2rem 1rem;
+                padding: 7rem 1rem 2rem;
             }
             
             .titulo-principal {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
             .contenedor-productos {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 1.5rem;
             }
             
             .nav-menu {
-                gap: 1rem;
+                gap: 0.7rem;
             }
             
             .boton-menu {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.8rem;
+                padding: 0.6rem 1rem;
+                font-size: 0.75rem;
+            }
+
+            header.scrolled .boton-menu {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.7rem;
             }
             
             .info-grid {
@@ -719,61 +1172,39 @@
             }
             
             .modal-contenido {
-                padding: 2rem;
-                margin: 1rem;
+                padding: 1.5rem;
+                margin: 0.5rem;
             }
             
-            .flotante-pago-btn, .flotante-redes-btn, .flotante-info-btn, .flotante-maps-btn {
-                width: 55px;
-                height: 55px;
-                font-size: 1.3rem;
-                bottom: 1rem;
-            }
-            
-            .flotante-pago-btn {
-                right: 1rem;
-            }
-            
-            .flotante-redes-btn {
-                right: 6rem;
-            }
-            
-            .flotante-info-btn {
-                right: 11rem;
-            }
-            
-            .flotante-maps-btn {
-                right: 16rem;
-            }
-            
-            .modal-maps .modal-contenido {
-                max-width: 95%;
+            .info-corporativa {
+                padding: 2rem 1.5rem;
+                margin: 3rem 0;
             }
         }
         
         @media (max-width: 480px) {
             .logo-text {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
             
             .titulo-principal {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .producto-detalles {
+                padding: 1.2rem;
+            }
+            
+            .modal-detalles-contenido {
                 padding: 1.5rem;
             }
             
-            .info-corporativa {
-                padding: 2rem 1.5rem;
+            .detalles-titulo {
+                font-size: 1.5rem;
             }
             
-            .flotante-info-btn, .flotante-maps-btn {
-                display: none;
-            }
-            
-            .mapa-contenedor {
-                height: 300px;
+            .detalles-precio {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -783,8 +1214,8 @@
     <div class="particulas" id="particulas"></div>
     
     <div class="wrapper">
-        <!-- HEADER CON LOGO Y MENÚ HORIZONTAL -->
-        <header>
+        <!-- HEADER FIJADO QUE SUBE CON EL SCROLL -->
+        <header id="mainHeader">
             <div class="header-container">
                 <div class="logo-section">
                     <img class="logo-img" src="img/logo/logo1.png.jpg" alt="T-SPORT Logo">
@@ -903,6 +1334,48 @@
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- MODAL DE DETALLES DEL PRODUCTO -->
+    <div id="modalDetalles" class="modal-detalles">
+        <div class="modal-detalles-contenido">
+            <button class="cerrar-modal-detalles" onclick="cerrarModalDetalles()">×</button>
+            
+            <img id="detallesImagen" class="detalles-imagen" src="" alt="Producto">
+            
+            <div class="detalles-info">
+                <h2 id="detallesTitulo" class="detalles-titulo"></h2>
+                <p id="detallesPrecio" class="detalles-precio"></p>
+                <div id="detallesDisponible" class="detalles-disponible"></div>
+                
+                <div class="detalles-caracteristicas" id="detallesCaracteristicas">
+                    <!-- Las características se cargarán dinámicamente -->
+                </div>
+                
+                <div class="detalles-tallas">
+                    <h3 class="tallas-titulo">Tallas Disponibles</h3>
+                    <div class="tallas-contenedor" id="tallasContenedor">
+                        <!-- Las tallas se cargarán dinámicamente -->
+                    </div>
+                </div>
+                
+                <div class="detalles-colores">
+                    <h3 class="colores-titulo">Colores Disponibles</h3>
+                    <div class="colores-contenedor" id="coloresContenedor">
+                        <!-- Los colores se cargarán dinámicamente -->
+                    </div>
+                </div>
+                
+                <div class="detalles-botones">
+                    <button id="botonAgregarDetalles" class="boton-detalles boton-agregar-detalles">
+                        <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                    </button>
+                    <button class="boton-detalles boton-cerrar-detalles" onclick="cerrarModalDetalles()">
+                        <i class="bi bi-x-circle"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- BOTONES FLOTANTES -->
@@ -1025,7 +1498,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE MAPA CORREGIDO -->
+    <!-- MODAL DE MAPA -->
     <div id="modalMaps" class="modal-maps">
         <div class="modal-contenido">
             <button class="cerrar-modal" onclick="cerrarModalMaps()">×</button>
@@ -1033,7 +1506,6 @@
             <p style="text-align: center; margin-bottom: 1rem;">Visítanos en nuestra tienda física</p>
             
             <div class="mapa-contenedor">
-                <!-- Mapa corregido con coordenadas específicas para El Alto, Bolivia -->
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3825.671835882151!2d-68.15938892468606!3d-16.50499968378777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915f206b1d7e03c5%3A0x8e1d9c9b0e8a3a3b!2sEl%20Alto%2C%20Bolivia!5e0!3m2!1ses!2sbo!4v1641234567890!5m2!1ses!2sbo" 
                     width="100%" 
@@ -1079,6 +1551,9 @@
 
         let productos = [];
         let productosEnCarrito = [];
+        let productoSeleccionado = null;
+        let tallaSeleccionada = null;
+        let colorSeleccionado = null;
 
         // FUNCIÓN DE VALIDACIÓN DE PRODUCTOS
         function validarProductoSeguro(producto) {
@@ -1121,16 +1596,46 @@
         const contenedorProductos = document.querySelector("#contenedor-productos");
         const tituloPrincipal = document.querySelector("#titulo-principal");
         const numerito = document.querySelector("#numerito");
+        const mainHeader = document.getElementById("mainHeader");
 
-        // DATOS DE PRODUCTOS T-SPORT
+        // DATOS DE PRODUCTOS T-SPORT COMPLETOS CON CARACTERÍSTICAS DETALLADAS
         const productosTSport = [
             {
                 "id": "chaqueta-01",
-                "titulo": "Chaqueta Deportiva ",
+                "titulo": "Chaqueta Deportiva Impermeable",
                 "precio": 75,
                 "imagen": "img/chaquetas/01.jpg",
                 "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
-                "disponible": 10
+                "disponible": 10,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Poliéster impermeable con tecnología Dry-Fit"
+                    },
+                    {
+                        "icono": "bi-wind",
+                        "titulo": "Respirabilidad",
+                        "descripcion": "Tejido transpirable que evita la acumulación de sudor"
+                    },
+                    {
+                        "icono": "bi-sun",
+                        "titulo": "Protección UV",
+                        "descripcion": "Protección solar UPF 50+"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Cremallera reforzada, bolsillos con cierre, capucha ajustable"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL", "XXL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Azul Marino", "codigo": "#1e3a5f"},
+                    {"nombre": "Rojo", "codigo": "#c41e3a"},
+                    {"nombre": "Verde", "codigo": "#228b22"}
+                ]
             },
             {
                 "id": "chaqueta-02",
@@ -1138,15 +1643,71 @@
                 "precio": 80,
                 "imagen": "img/chaquetas/02.jpg",
                 "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
-                "disponible": 8
+                "disponible": 8,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Algodón orgánico mezclado con elastano para mayor flexibilidad"
+                    },
+                    {
+                        "icono": "bi-thermometer",
+                        "titulo": "Aislamiento",
+                        "descripcion": "Forro polar interno para mayor calidez"
+                    },
+                    {
+                        "icono": "bi-shield-check",
+                        "titulo": "Durabilidad",
+                        "descripcion": "Costuras reforzadas en áreas de alto estrés"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Bolsillos laterales, cierre frontal completo, cuello alto"
+                    }
+                ],
+                "tallas": ["XS", "S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris Oscuro", "codigo": "#404040"},
+                    {"nombre": "Azul", "codigo": "#0000ff"}
+                ]
             },
             {
                 "id": "chaqueta-03",
-                "titulo": "Chaqueta Impermeable",
+                "titulo": "Chaqueta Impermeable Running",
                 "precio": 75,
                 "imagen": "img/chaquetas/03.jpg",
                 "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
-                "disponible": 5
+                "disponible": 5,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Nylon ultraligero con membrana impermeable"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Peso",
+                        "descripcion": "Solo 280g - perfecta para running y trekking"
+                    },
+                    {
+                        "icono": "bi-arrows-collapse",
+                        "titulo": "Compactibilidad",
+                        "descripcion": "Se pliega en su propio bolsillo para fácil transporte"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Reflectivos para visibilidad nocturna, ajuste ergonómico"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Amarillo", "codigo": "#ffd700"},
+                    {"nombre": "Naranja", "codigo": "#ff8c00"},
+                    {"nombre": "Verde Lima", "codigo": "#32cd32"}
+                ]
             },
             {
                 "id": "chaqueta-04",
@@ -1154,7 +1715,36 @@
                 "precio": 86,
                 "imagen": "img/chaquetas/04.jpg",
                 "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
-                "disponible": 7
+                "disponible": 7,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Poliéster reciclado con tecnología AEROREADY"
+                    },
+                    {
+                        "icono": "bi-wind",
+                        "titulo": "Ventilación",
+                        "descripcion": "Paneles de malla en axilas para mayor ventilación"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Ligereza",
+                        "descripcion": "Diseño ultraligero para máximo rendimiento"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Adidas bordado, bolsillos con cierre de seguridad"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL", "XXL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Azul", "codigo": "#0000ff"},
+                    {"nombre": "Blanco", "codigo": "#ffffff"},
+                    {"nombre": "Gris", "codigo": "#808080"}
+                ]
             },
             {
                 "id": "chaqueta-05",
@@ -1162,7 +1752,35 @@
                 "precio": 70,
                 "imagen": "img/chaquetas/05.jpg",
                 "categoria": {"id": "chaquetas", "nombre": "Chaquetas"},
-                "disponible": 6
+                "disponible": 6,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Mezcla de nylon y spandex para flexibilidad total"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Flexibilidad",
+                        "descripcion": "4-way stretch para movimientos multidireccionales"
+                    },
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Impermeabilidad",
+                        "descripcion": "Tratamiento DWR repelente al agua"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Diseño bicolor, cierre frontal completo, ajustes laterales"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro/Rojo", "codigo": "#000000"},
+                    {"nombre": "Azul/Blanco", "codigo": "#0000ff"},
+                    {"nombre": "Gris/Negro", "codigo": "#808080"}
+                ]
             },
             {
                 "id": "buso-01",
@@ -1170,7 +1788,35 @@
                 "precio": 75,
                 "imagen": "img/busos/01.jpg",
                 "categoria": {"id": "busos", "nombre": "Busos"},
-                "disponible": 12
+                "disponible": 12,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Algodón 80% - Poliéster 20% para mayor durabilidad"
+                    },
+                    {
+                        "icono": "bi-heart",
+                        "titulo": "Comodidad",
+                        "descripcion": "Tejido suave al tacto, ideal para uso diario"
+                    },
+                    {
+                        "icono": "bi-arrow-repeat",
+                        "titulo": "Mantenimiento",
+                        "descripcion": "Resistente al encogimiento y a los lavados frecuentes"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Bolsillo canguro, puños y cintura elásticos, capucha ajustable"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL", "XXL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris", "codigo": "#808080"},
+                    {"nombre": "Azul Marino", "codigo": "#1e3a5f"}
+                ]
             },
             {
                 "id": "buso-02",
@@ -1178,7 +1824,35 @@
                 "precio": 70,
                 "imagen": "img/busos/02.jpg",
                 "categoria": {"id": "busos", "nombre": "Busos"},
-                "disponible": 10
+                "disponible": 10,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Franela premium de algodón para máximo confort"
+                    },
+                    {
+                        "icono": "bi-thermometer",
+                        "titulo": "Calidez",
+                        "descripcion": "Forro interior suave que retiene el calor corporal"
+                    },
+                    {
+                        "icono": "bi-shield-check",
+                        "titulo": "Calidad",
+                        "descripcion": "Costuras reforzadas en puntos de tensión"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Nike bordado, bolsillo canguro con cierre"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris Heather", "codigo": "#616161"},
+                    {"nombre": "Azul", "codigo": "#0000ff"}
+                ]
             },
             {
                 "id": "buso-03",
@@ -1186,7 +1860,35 @@
                 "precio": 85,
                 "imagen": "img/busos/03.jpg",
                 "categoria": {"id": "busos", "nombre": "Busos"},
-                "disponible": 8
+                "disponible": 8,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Mezcla premium de algodón y poliéster"
+                    },
+                    {
+                        "icono": "bi-heart",
+                        "titulo": "Confort",
+                        "descripcion": "Interior cepillado para sensación suave y cálida"
+                    },
+                    {
+                        "icono": "bi-arrow-repeat",
+                        "titulo": "Durabilidad",
+                        "descripcion": "Mantiene su forma y color después de múltiples lavados"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Ribete en puños y cintura, diseño clásico Nike"
+                    }
+                ],
+                "tallas": ["XS", "S", "M", "L", "XL", "XXL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris", "codigo": "#808080"},
+                    {"nombre": "Rojo", "codigo": "#c41e3a"}
+                ]
             },
             {
                 "id": "buso-04",
@@ -1194,7 +1896,35 @@
                 "precio": 38,
                 "imagen": "img/busos/04.jpg",
                 "categoria": {"id": "busos", "nombre": "Busos"},
-                "disponible": 9
+                "disponible": 9,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Algodón peinado de alta calidad"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Ligereza",
+                        "descripcion": "Peso ligero ideal para actividades diarias"
+                    },
+                    {
+                        "icono": "bi-palette",
+                        "titulo": "Diseño",
+                        "descripcion": "Detalles contrastantes en mangas y capucha"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Puños acanalados, bolsillo frontal, ajuste regular"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Azul Marino", "codigo": "#1e3a5f"},
+                    {"nombre": "Verde", "codigo": "#228b22"},
+                    {"nombre": "Morado", "codigo": "#800080"}
+                ]
             },
             {
                 "id": "buso-05",
@@ -1202,7 +1932,35 @@
                 "precio": 65,
                 "imagen": "img/busos/05.jpg",
                 "categoria": {"id": "busos", "nombre": "Busos"},
-                "disponible": 11
+                "disponible": 11,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Tejido French Terry premium"
+                    },
+                    {
+                        "icono": "bi-star",
+                        "titulo": "Estilo",
+                        "descripcion": "Diseño inspirado en la línea Jordan"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Ajuste",
+                        "descripcion": "Corte moderno que se adapta al cuerpo"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Jordan bordado, ribetes contrastantes"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL", "XXL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Rojo", "codigo": "#c41e3a"},
+                    {"nombre": "Gris", "codigo": "#808080"}
+                ]
             },
             {
                 "id": "buso-06",
@@ -1210,7 +1968,35 @@
                 "precio": 75,
                 "imagen": "img/busos/06.jpg",
                 "categoria": {"id": "busos", "nombre": "Busos"},
-                "disponible": 7
+                "disponible": 7,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Algodón orgánico con mezcla de poliéster"
+                    },
+                    {
+                        "icono": "bi-heart",
+                        "titulo": "Suavidad",
+                        "descripcion": "Tejido suave que no irrita la piel"
+                    },
+                    {
+                        "icono": "bi-arrow-repeat",
+                        "titulo": "Práctica",
+                        "descripcion": "Fácil cuidado y mantenimiento"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Diseño minimalista, tres rayas Adidas, capucha ajustable"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Blanco", "codigo": "#ffffff"},
+                    {"nombre": "Gris", "codigo": "#808080"}
+                ]
             },
             {
                 "id": "short-01",
@@ -1218,7 +2004,36 @@
                 "precio": 25,
                 "imagen": "img/shorts/01.jpg",
                 "categoria": {"id": "shorts", "nombre": "Shorts"},
-                "disponible": 15
+                "disponible": 15,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Poliéster elastano para máxima flexibilidad"
+                    },
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Secado Rápido",
+                        "descripcion": "Tecnología de absorción y evaporación rápida"
+                    },
+                    {
+                        "icono": "bi-shield-check",
+                        "titulo": "Diseño",
+                        "descripcion": "Corte ergonómico que se adapta al movimiento"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Cintura elástica con cordón interno, bolsillo trasero con cierre"
+                    }
+                ],
+                "tallas": ["XS", "S", "M", "L"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Azul Marino", "codigo": "#1e3a5f"},
+                    {"nombre": "Morado", "codigo": "#800080"},
+                    {"nombre": "Rosa", "codigo": "#ff69b4"}
+                ]
             },
             {
                 "id": "short-02",
@@ -1226,15 +2041,71 @@
                 "precio": 28,
                 "imagen": "img/shorts/02.jpg",
                 "categoria": {"id": "shorts", "nombre": "Shorts"},
-                "disponible": 12
+                "disponible": 12,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Dri-FIT technology para mantener la sequedad"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Flexibilidad",
+                        "descripcion": "4-way stretch para libertad de movimiento"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Rendimiento",
+                        "descripcion": "Diseño atlético para entrenamiento intenso"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Nike estampado, cintura alta, abertura lateral"
+                    }
+                ],
+                "tallas": ["XS", "S", "M", "L"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris", "codigo": "#808080"},
+                    {"nombre": "Azul", "codigo": "#0000ff"}
+                ]
             },
             {
                 "id": "short-03",
-                "titulo": "Short Deportivo Adidas ",
+                "titulo": "Short Deportivo Adidas",
                 "precio": 26,
                 "imagen": "img/shorts/03.jpg",
                 "categoria": {"id": "shorts", "nombre": "Shorts"},
-                "disponible": 10
+                "disponible": 10,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Tela AEROREADY que absorbe el sudor"
+                    },
+                    {
+                        "icono": "bi-wind",
+                        "titulo": "Ventilación",
+                        "descripcion": "Paneles de malla para mayor circulación de aire"
+                    },
+                    {
+                        "icono": "bi-shield-check",
+                        "titulo": "Durabilidad",
+                        "descripcion": "Costuras reforzadas para mayor resistencia"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Tres rayas Adidas, bolsillo interno, cintura elástica"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Verde", "codigo": "#228b22"},
+                    {"nombre": "Rojo", "codigo": "#c41e3a"}
+                ]
             },
             {
                 "id": "short-04",
@@ -1242,7 +2113,35 @@
                 "precio": 27,
                 "imagen": "img/shorts/04.jpg",
                 "categoria": {"id": "shorts", "nombre": "Shorts"},
-                "disponible": 14
+                "disponible": 14,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Mezcla de poliéster y elastano"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Rendimiento",
+                        "descripcion": "Diseño inspirado en baloncesto"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Movimiento",
+                        "descripcion": "Permite amplio rango de movimiento"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Jumpman, bolsillos laterales, cintura con cordón"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL", "XXL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Rojo", "codigo": "#c41e3a"},
+                    {"nombre": "Blanco", "codigo": "#ffffff"}
+                ]
             },
             {
                 "id": "short-05",
@@ -1250,7 +2149,35 @@
                 "precio": 24,
                 "imagen": "img/shorts/05.jpg",
                 "categoria": {"id": "shorts", "nombre": "Shorts"},
-                "disponible": 18
+                "disponible": 18,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Poliéster reciclado con tecnología Dri-FIT"
+                    },
+                    {
+                        "icono": "bi-tree",
+                        "titulo": "Sostenibilidad",
+                        "descripcion": "Hecho con materiales reciclados"
+                    },
+                    {
+                        "icono": "bi-heart",
+                        "titulo": "Comodidad",
+                        "descripcion": "Ligero y cómodo para uso diario"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Nike estampado, diseño minimalista, versátil"
+                    }
+                ],
+                "tallas": ["XS", "S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Gris", "codigo": "#808080"},
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Azul", "codigo": "#0000ff"}
+                ]
             },
             {
                 "id": "conjunto-01",
@@ -1258,7 +2185,36 @@
                 "precio": 65,
                 "imagen": "img/conjuntos/01.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 3
+                "disponible": 8,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Mezcla premium de algodón y poliéster para máximo confort"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Flexibilidad",
+                        "descripcion": "4-way stretch para libertad de movimiento completa"
+                    },
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Transpirabilidad",
+                        "descripcion": "Tejido con tecnología de ventilación estratégica"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Costuras planas para evitar rozaduras, diseño moderno"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris", "codigo": "#808080"},
+                    {"nombre": "Azul", "codigo": "#0000ff"},
+                    {"nombre": "Rojo", "codigo": "#c41e3a"}
+                ]
             },
             {
                 "id": "conjunto-02",
@@ -1266,7 +2222,35 @@
                 "precio": 70,
                 "imagen": "img/conjuntos/02.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 6
+                "disponible": 6,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Poliéster técnico con elastano"
+                    },
+                    {
+                        "icono": "bi-palette",
+                        "titulo": "Diseño",
+                        "descripcion": "Combinación de colores moderna y atractiva"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Rendimiento",
+                        "descripcion": "Optimizado para actividades deportivas"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Detalles reflectivos, costuras reforzadas, ajuste perfecto"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Azul/Blanco", "codigo": "#0000ff"},
+                    {"nombre": "Negro/Rojo", "codigo": "#000000"},
+                    {"nombre": "Gris/Negro", "codigo": "#808080"}
+                ]
             },
             {
                 "id": "conjunto-03",
@@ -1274,7 +2258,35 @@
                 "precio": 68,
                 "imagen": "img/conjuntos/03.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 7
+                "disponible": 7,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Dri-FIT technology para máximo rendimiento"
+                    },
+                    {
+                        "icono": "bi-wind",
+                        "titulo": "Ventilación",
+                        "descripcion": "Zonas de malla estratégicas"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Movilidad",
+                        "descripcion": "Diseño ergonómico que sigue el movimiento"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Logo Nike, diseño coordinado, ideal para entrenamiento"
+                    }
+                ],
+                "tallas": ["XS", "S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro/Gris", "codigo": "#000000"},
+                    {"nombre": "Azul/Blanco", "codigo": "#0000ff"},
+                    {"nombre": "Rojo/Negro", "codigo": "#c41e3a"}
+                ]
             },
             {
                 "id": "conjunto-04",
@@ -1282,7 +2294,35 @@
                 "precio": 62,
                 "imagen": "img/conjuntos/04.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 9
+                "disponible": 9,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "AEROREADY para mantener la sequedad"
+                    },
+                    {
+                        "icono": "bi-heart",
+                        "titulo": "Comodidad",
+                        "descripcion": "Tejido suave y transpirable"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Actividad",
+                        "descripcion": "Ideal para running y gimnasio"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Tres rayas Adidas, diseño coordinado, funcional"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Azul", "codigo": "#0000ff"},
+                    {"nombre": "Gris", "codigo": "#808080"}
+                ]
             },
             {
                 "id": "conjunto-05",
@@ -1290,7 +2330,35 @@
                 "precio": 75,
                 "imagen": "img/conjuntos/05.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 5
+                "disponible": 5,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Tecnología Nike Pro avanzada"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Innovación",
+                        "descripcion": "Diseño de última generación"
+                    },
+                    {
+                        "icono": "bi-arrows-angle-contract",
+                        "titulo": "Compresión",
+                        "descripcion": "Ajuste compresivo para mejor rendimiento"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Costuras planas, diseño aerodinámico, máximo confort"
+                    }
+                ],
+                "tallas": ["S", "M", "L"],
+                "colores": [
+                    {"nombre": "Negro", "codigo": "#000000"},
+                    {"nombre": "Gris", "codigo": "#808080"},
+                    {"nombre": "Azul Marino", "codigo": "#1e3a5f"}
+                ]
             },
             {
                 "id": "conjunto-06",
@@ -1298,7 +2366,35 @@
                 "precio": 72,
                 "imagen": "img/conjuntos/06.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 4
+                "disponible": 4,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Mezcla técnica de alta performance"
+                    },
+                    {
+                        "icono": "bi-palette",
+                        "titulo": "Estilo",
+                        "descripcion": "Combinación de tonos en negro"
+                    },
+                    {
+                        "icono": "bi-lightning",
+                        "titulo": "Rendimiento",
+                        "descripcion": "Optimizado para deportes intensos"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Detalles reflectivos, diseño moderno, ajuste perfecto"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Negro/Gris", "codigo": "#000000"},
+                    {"nombre": "Negro/Rojo", "codigo": "#000000"},
+                    {"nombre": "Negro/Azul", "codigo": "#000000"}
+                ]
             },
             {
                 "id": "conjunto-07",
@@ -1306,7 +2402,35 @@
                 "precio": 69,
                 "imagen": "img/conjuntos/07.jpg",
                 "categoria": {"id": "conjuntos", "nombre": "Conjuntos"},
-                "disponible": 6
+                "disponible": 6,
+                "caracteristicas": [
+                    {
+                        "icono": "bi-droplet",
+                        "titulo": "Material",
+                        "descripcion": "Poliéster de alta calidad con protección UV"
+                    },
+                    {
+                        "icono": "bi-sun",
+                        "titulo": "Protección",
+                        "descripcion": "UPF 50+ para actividades al aire libre"
+                    },
+                    {
+                        "icono": "bi-palette",
+                        "titulo": "Diseño",
+                        "descripcion": "Detalles contrastantes en colores vibrantes"
+                    },
+                    {
+                        "icono": "bi-tag",
+                        "titulo": "Detalles",
+                        "descripcion": "Costuras reforzadas, diseño elegante, versátil"
+                    }
+                ],
+                "tallas": ["S", "M", "L", "XL"],
+                "colores": [
+                    {"nombre": "Blanco/Negro", "codigo": "#ffffff"},
+                    {"nombre": "Blanco/Azul", "codigo": "#ffffff"},
+                    {"nombre": "Blanco/Rojo", "codigo": "#ffffff"}
+                ]
             }
         ];
 
@@ -1319,6 +2443,18 @@
             cargarProductos(productos);
             actualizarNumerito();
             crearParticulas();
+            configurarScrollHeader();
+        }
+
+        // CONFIGURAR HEADER QUE CAMBIA CON EL SCROLL
+        function configurarScrollHeader() {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    mainHeader.classList.add('scrolled');
+                } else {
+                    mainHeader.classList.remove('scrolled');
+                }
+            });
         }
 
         // CREAR PARTÍCULAS DE FONDO
@@ -1389,18 +2525,42 @@
                 div.classList.add("producto");
                 div.setAttribute("data-categoria", producto.categoria.id);
 
+                // Determinar clase de disponibilidad
+                let claseDisponible = '';
+                let textoDisponible = '';
+                if (producto.disponible === 0) {
+                    claseDisponible = 'agotado';
+                    textoDisponible = 'Agotado';
+                } else if (producto.disponible <= 3) {
+                    claseDisponible = 'poco-stock';
+                    textoDisponible = `Solo ${producto.disponible} disponibles`;
+                } else {
+                    claseDisponible = '';
+                    textoDisponible = `Disponible: ${producto.disponible}`;
+                }
+
                 div.innerHTML = `
                     <img class="producto-imagen" src="${producto.imagen}" alt="${producto.titulo}">
                     <div class="producto-detalles">
                         <h3 class="producto-titulo">${producto.titulo}</h3>
                         <p class="producto-precio">Bs. ${producto.precio}</p>
-                        <p class="producto-disponible">Disponible: ${producto.disponible}</p>
+                        <p class="producto-disponible ${claseDisponible}">
+                            <i class="bi ${producto.disponible === 0 ? 'bi-x-circle' : producto.disponible <= 3 ? 'bi-exclamation-triangle' : 'bi-check-circle'}"></i>
+                            ${textoDisponible}
+                        </p>
                         <button class="producto-agregar ${producto.disponible === 0 ? 'producto-agotado' : ''}" 
                             id="${producto.id}">
                             ${producto.disponible === 0 ? 'Agotado' : 'Agregar al Carrito'}
                         </button>
                     </div>
                 `;
+
+                // Agregar evento de clic para abrir detalles
+                div.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('producto-agregar')) {
+                        abrirModalDetalles(producto);
+                    }
+                });
 
                 contenedorProductos.append(div);
             });
@@ -1428,6 +2588,7 @@
 
         // FUNCIÓN AGREGAR AL CARRITO
         function agregarAlCarrito(e) {
+            e.stopPropagation(); // Prevenir que se abra el modal de detalles
             const idBoton = e.currentTarget.id;
             
             const productoAgregado = productos.find(producto => producto.id === idBoton);
@@ -1444,6 +2605,9 @@
                 });
                 return;
             }
+            
+            // Actualizar stock
+            productoAgregado.disponible--;
             
             Toastify({
                 text: "Producto agregado al carrito",
@@ -1498,7 +2662,183 @@
             }
         }
 
-        // FUNCIONALIDAD DE MODALES
+        // FUNCIONALIDAD DEL MODAL DE DETALLES
+        function abrirModalDetalles(producto) {
+            productoSeleccionado = producto;
+            tallaSeleccionada = null;
+            colorSeleccionado = null;
+            
+            // Actualizar información básica
+            document.getElementById('detallesImagen').src = producto.imagen;
+            document.getElementById('detallesTitulo').textContent = producto.titulo;
+            document.getElementById('detallesPrecio').textContent = `Bs. ${producto.precio}`;
+            
+            // Actualizar disponibilidad
+            const detallesDisponible = document.getElementById('detallesDisponible');
+            detallesDisponible.textContent = producto.disponible === 0 ? 'Agotado' : 
+                                           producto.disponible <= 3 ? `Solo ${producto.disponible} disponibles` : 
+                                           'Disponible';
+            detallesDisponible.className = 'detalles-disponible ' + 
+                (producto.disponible === 0 ? 'agotado' : 
+                 producto.disponible <= 3 ? 'poco-stock' : 'disponible');
+            
+            // Cargar características
+            const caracteristicasContainer = document.getElementById('detallesCaracteristicas');
+            caracteristicasContainer.innerHTML = '';
+            
+            producto.caracteristicas.forEach(caracteristica => {
+                const div = document.createElement('div');
+                div.className = 'caracteristica-item';
+                div.innerHTML = `
+                    <div class="caracteristica-icono">
+                        <i class="bi ${caracteristica.icono}"></i>
+                    </div>
+                    <div class="caracteristica-texto">
+                        <div class="caracteristica-titulo">${caracteristica.titulo}</div>
+                        <div class="caracteristica-descripcion">${caracteristica.descripcion}</div>
+                    </div>
+                `;
+                caracteristicasContainer.appendChild(div);
+            });
+            
+            // Cargar tallas
+            const tallasContainer = document.getElementById('tallasContenedor');
+            tallasContainer.innerHTML = '';
+            
+            producto.tallas.forEach(talla => {
+                const button = document.createElement('button');
+                button.className = 'talla-item';
+                button.textContent = talla;
+                button.addEventListener('click', function() {
+                    // Remover selección anterior
+                    document.querySelectorAll('.talla-item').forEach(item => {
+                        item.classList.remove('seleccionada');
+                    });
+                    // Seleccionar nueva talla
+                    this.classList.add('seleccionada');
+                    tallaSeleccionada = talla;
+                });
+                tallasContainer.appendChild(button);
+            });
+            
+            // Cargar colores
+            const coloresContainer = document.getElementById('coloresContenedor');
+            coloresContainer.innerHTML = '';
+            
+            producto.colores.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'color-item';
+                div.style.backgroundColor = color.codigo;
+                div.setAttribute('title', color.nombre);
+                div.addEventListener('click', function() {
+                    // Remover selección anterior
+                    document.querySelectorAll('.color-item').forEach(item => {
+                        item.classList.remove('seleccionado');
+                    });
+                    // Seleccionar nuevo color
+                    this.classList.add('seleccionado');
+                    colorSeleccionado = color;
+                });
+                coloresContainer.appendChild(div);
+            });
+            
+            // Actualizar botón de agregar
+            const botonAgregar = document.getElementById('botonAgregarDetalles');
+            if (producto.disponible === 0) {
+                botonAgregar.disabled = true;
+                botonAgregar.innerHTML = '<i class="bi bi-x-circle"></i> Agotado';
+                botonAgregar.style.background = 'linear-gradient(135deg, #666, #999)';
+            } else {
+                botonAgregar.disabled = false;
+                botonAgregar.innerHTML = '<i class="bi bi-cart-plus"></i> Agregar al Carrito';
+                botonAgregar.style.background = 'linear-gradient(135deg, var(--color-primario), var(--color-primario-hover))';
+                botonAgregar.onclick = function() {
+                    agregarAlCarritoDesdeDetalles();
+                };
+            }
+            
+            // Mostrar modal
+            document.getElementById('modalDetalles').classList.add('mostrar');
+        }
+
+        function cerrarModalDetalles() {
+            document.getElementById('modalDetalles').classList.remove('mostrar');
+            productoSeleccionado = null;
+            tallaSeleccionada = null;
+            colorSeleccionado = null;
+        }
+
+        function agregarAlCarritoDesdeDetalles() {
+            if (!productoSeleccionado || productoSeleccionado.disponible <= 0) {
+                Swal.fire({
+                    title: 'Producto agotado',
+                    text: 'Lo sentimos, este producto no está disponible en este momento',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+            
+            // Verificar si se seleccionó talla y color
+            let mensajeAdicional = '';
+            if (tallaSeleccionada) {
+                mensajeAdicional += `Talla: ${tallaSeleccionada}`;
+            }
+            if (colorSeleccionado) {
+                mensajeAdicional += mensajeAdicional ? `, Color: ${colorSeleccionado.nombre}` : `Color: ${colorSeleccionado.nombre}`;
+            }
+            
+            // Actualizar stock
+            productoSeleccionado.disponible--;
+            
+            Toastify({
+                text: `Producto agregado${mensajeAdicional ? ` (${mensajeAdicional})` : ''}`,
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                  background: "linear-gradient(135deg, var(--color-primario), var(--color-primario-hover))",
+                  borderRadius: "15px",
+                  textTransform: "uppercase",
+                  fontSize: ".9rem",
+                  fontWeight: "bold",
+                  boxShadow: "0 5px 15px rgba(0, 174, 255, 0.5)"
+                }
+            }).showToast();
+
+            // Agregar al carrito
+            if(productosEnCarrito.some(producto => producto.id === productoSeleccionado.id)) {
+                const index = productosEnCarrito.findIndex(producto => producto.id === productoSeleccionado.id);
+                if (productosEnCarrito[index].cantidad < SEGURIDAD.CANTIDAD_MAXIMA) {
+                    productosEnCarrito[index].cantidad++;
+                }
+            } else {
+                const productoParaCarrito = {...productoSeleccionado};
+                productoParaCarrito.cantidad = 1;
+                // Agregar información de talla y color seleccionados
+                if (tallaSeleccionada || colorSeleccionado) {
+                    productoParaCarrito.seleccion = {};
+                    if (tallaSeleccionada) productoParaCarrito.seleccion.talla = tallaSeleccionada;
+                    if (colorSeleccionado) productoParaCarrito.seleccion.color = colorSeleccionado;
+                }
+                productosEnCarrito.push(productoParaCarrito);
+            }
+
+            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+            actualizarNumerito();
+            cerrarModalDetalles();
+            
+            // RECARGAR PRODUCTOS PARA ACTUALIZAR INTERFAZ
+            const categoriaActiva = document.querySelector(".boton-menu.active");
+            if (categoriaActiva) {
+                const categoria = categoriaActiva.getAttribute('data-categoria');
+                filtrarProductos(categoria);
+            }
+        }
+
+        // FUNCIONALIDAD DE MODALES EXISTENTES
         function abrirModalPago() {
             document.getElementById('modalPago').classList.add('mostrar');
         }
@@ -1548,6 +2888,10 @@
             if (e.target === this) cerrarModalMaps();
         });
 
+        document.getElementById('modalDetalles')?.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModalDetalles();
+        });
+
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
             console.log("🚀 T-SPORT - Página cargada con éxito");
@@ -1561,6 +2905,7 @@
         });
     </script>
 </body>
-
 </html>
+
+
 
