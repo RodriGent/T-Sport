@@ -113,7 +113,7 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
             padding: 3rem;
             border-radius: 20px;
-            width: 450px;
+            width: 500px;
             max-width: 90vw;
             overflow: hidden;
             animation: slideIn 1s ease forwards;
@@ -228,6 +228,88 @@
             background: linear-gradient(135deg, var(--color-primario-hover), var(--color-primario));
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 174, 255, 0.6);
+        }
+
+        /* ========== RESUMEN DEL PEDIDO ========== */
+        .resumen-pedido {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .resumen-pedido h3 {
+            color: var(--color-primario);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .producto-resumen {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .producto-resumen:last-child {
+            border-bottom: none;
+        }
+
+        .producto-info-resumen {
+            flex: 1;
+        }
+
+        .producto-titulo-resumen {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-primario);
+            margin-bottom: 0.3rem;
+        }
+
+        .producto-caracteristicas-resumen {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.3rem;
+        }
+
+        .caracteristica-resumen {
+            background: rgba(0, 174, 255, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            border: 1px solid var(--color-primario);
+        }
+
+        .producto-precio-resumen {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-texto);
+        }
+
+        .producto-cantidad-resumen {
+            font-weight: 700;
+            color: var(--color-primario);
+            margin: 0 1rem;
+        }
+
+        .producto-subtotal-resumen {
+            font-weight: 700;
+            color: var(--color-primario);
+        }
+
+        .total-resumen {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--color-primario);
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         /* ========== FOOTER FORMULARIO ========== */
@@ -463,6 +545,7 @@
                 margin-top: 100px;
                 margin-bottom: 80px;
                 padding: 2rem;
+                width: 400px;
             }
             
             .slide-form h2 {
@@ -534,17 +617,19 @@
         <div class="slide-form"> 
             <h2>Formulario de Pedido</h2> 
 
-            <input type="text" name="from_name" required placeholder="Tu nombre completo">
+            <!-- RESUMEN DEL PEDIDO -->
+            <div class="resumen-pedido" id="resumenPedido">
+                <h3>Resumen de tu Pedido</h3>
+                <!-- Los productos se cargarán aquí con JavaScript -->
+            </div>
+
+            <input type="text" name="user_name" required placeholder="Tu nombre completo">
             
-            <input type="email" name="from_email" required placeholder="Tu correo electrónico">
+            <input type="email" name="user_email" required placeholder="Tu correo electrónico">
             
-            <input type="tel" name="from_phone" required placeholder="Tu número de teléfono">
+            <input type="tel" name="user_phone" required placeholder="Tu número de teléfono">
             
             <textarea name="message" cols="30" rows="5" placeholder="Comentarios adicionales"></textarea>
-
-            <!-- CAMPOS OCULTOS PARA PRODUCTOS Y TOTAL -->
-            <input type="hidden" name="productos" id="productosCarrito">
-            <input type="hidden" name="total" id="totalPedido">
 
             <button type="submit" class="pago">
                 <i class="bi bi-send-check-fill"></i> Confirmar Pedido
@@ -699,20 +784,86 @@
             }
         }
 
-        // INICIALIZAR EMAILJS CON TUS NUEVAS CREDENCIALES
+        // INICIALIZAR EMAILJS
         (function() {
-            emailjs.init("bWhczpJ4jgTyRImBi"); // Tu nueva Public Key
+            emailjs.init("bWhczpJ4jgTyRImBi");
         })();
 
-        // ==================== SISTEMA DE SEGURIDAD FORMULARIO ====================
-        const SEGURIDAD_FORM = {
-            MAX_INTENTOS: 3,
-            TIEMPO_ESPERA: 30000,
-            intentos: 0,
-            ultimoEnvio: 0
-        };
+        // CARGAR RESUMEN DEL PEDIDO - CORREGIDO
+        function cargarResumenPedido() {
+            const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
+            const resumenPedido = document.getElementById('resumenPedido');
+            
+            if (productos.length === 0) {
+                resumenPedido.innerHTML = `
+                    <h3>Resumen de tu Pedido</h3>
+                    <p style="text-align: center; color: var(--color-error);">No hay productos en el carrito</p>
+                `;
+                return false;
+            }
 
-        // VALIDAR PRODUCTOS ANTES DE ENVIAR
+            let html = '<h3>Resumen de tu Pedido</h3>';
+            let total = 0;
+
+            productos.forEach(producto => {
+                const subtotal = producto.precio * producto.cantidad;
+                total += subtotal;
+
+                // CORRECCIÓN: Manejo correcto de características
+                let caracteristicasHTML = '';
+                const caracteristicas = [];
+
+                // Manejar selecciones del modal de detalles
+                if (producto.seleccion) {
+                    if (producto.seleccion.talla) {
+                        caracteristicas.push(`<span class="caracteristica-resumen">Talla: ${producto.seleccion.talla}</span>`);
+                    }
+                    if (producto.seleccion.color) {
+                        const colorNombre = producto.seleccion.color.nombre || producto.seleccion.color;
+                        caracteristicas.push(`<span class="caracteristica-resumen">Color: ${colorNombre}</span>`);
+                    }
+                }
+
+                // Manejar características directas
+                if (producto.caracteristicas && Array.isArray(producto.caracteristicas)) {
+                    producto.caracteristicas.forEach(caracteristica => {
+                        caracteristicas.push(`<span class="caracteristica-resumen">${caracteristica.titulo}: ${caracteristica.descripcion}</span>`);
+                    });
+                }
+
+                if (caracteristicas.length > 0) {
+                    caracteristicasHTML = `
+                        <div class="producto-caracteristicas-resumen">
+                            ${caracteristicas.join('')}
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="producto-resumen">
+                        <div class="producto-info-resumen">
+                            <div class="producto-titulo-resumen">${producto.titulo}</div>
+                            ${caracteristicasHTML}
+                            <div class="producto-precio-resumen">Bs. ${producto.precio} c/u</div>
+                        </div>
+                        <div class="producto-cantidad-resumen">x${producto.cantidad}</div>
+                        <div class="producto-subtotal-resumen">Bs. ${subtotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="total-resumen">
+                    <span>TOTAL:</span>
+                    <span>Bs. ${total.toFixed(2)}</span>
+                </div>
+            `;
+
+            resumenPedido.innerHTML = html;
+            return true;
+        }
+
+        // VALIDAR PRODUCTOS
         function validarProductosFormulario() {
             const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
             
@@ -732,7 +883,7 @@
             return true;
         }
 
-        // VALIDAR FORMULARIO COMPLETO
+        // VALIDAR FORMULARIO
         function validarFormularioCompleto(nombre, correo, telefono) {
             if (nombre.trim().length < 3) {
                 Swal.fire({
@@ -773,123 +924,56 @@
                 return false;
             }
             
-            SEGURIDAD_FORM.intentos++;
-            if (SEGURIDAD_FORM.intentos > SEGURIDAD_FORM.MAX_INTENTOS) {
-                Swal.fire({
-                    title: 'Demasiados intentos',
-                    text: 'Por favor espera 30 segundos antes de intentar nuevamente',
-                    icon: 'error',
-                    confirmButtonText: 'Entendido',
-                    background: 'var(--color-secundario)',
-                    color: 'var(--color-texto)',
-                    confirmButtonColor: 'var(--color-primario)'
-                });
-                return false;
-            }
-            
-            const ahora = Date.now();
-            if (ahora - SEGURIDAD_FORM.ultimoEnvio < 5000) {
-                Swal.fire({
-                    title: 'Espera un momento',
-                    text: 'Por favor espera 5 segundos entre envíos',
-                    icon: 'warning',
-                    confirmButtonText: 'Entendido',
-                    background: 'var(--color-secundario)',
-                    color: 'var(--color-texto)',
-                    confirmButtonColor: 'var(--color-primario)'
-                });
-                return false;
-            }
-            SEGURIDAD_FORM.ultimoEnvio = ahora;
-            
             return true;
         }
 
-        // CARGAR PRODUCTOS AL INICIAR
-        document.addEventListener('DOMContentLoaded', function() {
-            crearParticulas();
-            
-            const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
-            console.log("🛒 Productos en carrito:", productos);
-            
-            document.getElementById('productosCarrito').value = JSON.stringify(productos);
-            const total = productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
-            document.getElementById('totalPedido').value = `Bs. ${total.toFixed(2)}`;
-            
-            console.log("💰 Total del pedido:", total);
-        });
-
-        // ENVÍO SEGURO DEL FORMULARIO
-        document.getElementById('formularioCompra').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nombre = document.querySelector('input[name="from_name"]').value;
-            const correo = document.querySelector('input[name="from_email"]').value;
-            const telefono = document.querySelector('input[name="from_phone"]').value;
-            const comentario = document.querySelector('textarea[name="message"]').value;
+        // ENVIAR PEDIDO - CORREGIDO CON VARIABLES CORRECTAS
+        function enviarPedido(nombre, correo, telefono, comentario) {
             const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
             const total = productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
-            
-            console.log("📦 Productos a enviar:", productos);
-            console.log("💰 Total a enviar:", total);
-            console.log("📱 Teléfono a enviar:", telefono);
-            
-            if (!validarProductosFormulario()) return;
-            if (!validarFormularioCompleto(nombre, correo, telefono)) return;
-            
-            Swal.fire({
-                title: '¿Confirmar pedido T-SPORT?',
-                html: `
-                    <div style="text-align: left;">
-                        <p><strong>Productos deportivos:</strong></p>
-                        <ul>
-                            ${productos.map(p => `<li>${p.titulo} (x${p.cantidad}) - Bs. ${(p.precio * p.cantidad).toFixed(2)}</li>`).join('')}
-                        </ul>
-                        <p><strong>Total: Bs. ${total.toFixed(2)}</strong></p>
-                        <p><strong>Nombre:</strong> ${nombre}</p>
-                        <p><strong>Email:</strong> ${correo}</p>
-                        <p><strong>Teléfono:</strong> ${telefono}</p>
-                    </div>
-                `,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, confirmar',
-                cancelButtonText: 'Revisar',
-                background: 'var(--color-secundario)',
-                color: 'var(--color-texto)',
-                confirmButtonColor: 'var(--color-primario)',
-                cancelButtonColor: 'var(--color-error)'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    enviarPedido(nombre, correo, telefono, comentario, productos, total);
-                }
-            });
-        });
 
-        // FUNCIÓN PARA ENVIAR PEDIDO - CORREGIDA
-        function enviarPedido(nombre, correo, telefono, comentario, productos, total) {
             console.log("📧 Iniciando envío con EmailJS...");
-            
-            // Formatear productos para el email
-            const productosTexto = productos.map(p => 
-                `${p.titulo} (x${p.cantidad}) - Bs. ${(p.precio * p.cantidad).toFixed(2)}`
-            ).join('\n');
+            console.log("📦 Productos:", productos);
+            console.log("📱 Teléfono:", telefono);
 
+            // Formatear productos con características para el email
+            const productosTexto = productos.map(p => {
+                let caracteristicas = '';
+                
+                // Manejar selecciones del modal
+                if (p.seleccion) {
+                    if (p.seleccion.talla) caracteristicas += ` Talla: ${p.seleccion.talla}`;
+                    if (p.seleccion.color) {
+                        const colorNombre = p.seleccion.color.nombre || p.seleccion.color;
+                        caracteristicas += ` Color: ${colorNombre}`;
+                    }
+                }
+
+                // Manejar características adicionales
+                if (p.caracteristicas && Array.isArray(p.caracteristicas)) {
+                    p.caracteristicas.forEach(caracteristica => {
+                        caracteristicas += ` ${caracteristica.titulo}: ${caracteristica.descripcion}`;
+                    });
+                }
+
+                return `• ${p.titulo}${caracteristicas ? ` (${caracteristicas.trim()})` : ''} - Cantidad: ${p.cantidad} - Subtotal: Bs. ${(p.precio * p.cantidad).toFixed(2)}`;
+            }).join('\n');
+
+            // VARIABLES CORRECTAS PARA EMAILJS
             const templateParams = {
-                from_name: nombre,
-                from_email: correo,
-                from_phone: telefono, // ✅ VARIABLE CORREGIDA
-                reply_to: correo,
+                user_name: nombre,           // ✅ Variable correcta
+                user_email: correo,          // ✅ Variable correcta  
+                user_phone: telefono,        // ✅ Variable correcta para teléfono
                 message: comentario || 'Sin comentarios adicionales',
-                productos: productosTexto,
+                productos: productosTexto,   // ✅ Productos con características
                 total: `Bs. ${total.toFixed(2)}`,
-                fecha: new Date().toLocaleString(),
+                fecha: new Date().toLocaleString('es-BO'),
                 tienda: 'T-SPORT'
             };
 
             console.log("📨 Parámetros a enviar:", templateParams);
 
-            // USANDO TUS NUEVOS SERVICE ID Y TEMPLATE ID
+            // ENVIAR CON SERVICE ID Y TEMPLATE ID CORRECTOS
             emailjs.send('service_dmwqrrm', 'template_jqhsowb', templateParams)
                 .then(function(response) {
                     console.log('✅ Email enviado EXITOSAMENTE:', response);
@@ -899,13 +983,12 @@
                         html: `
                             <div style="text-align: left;">
                                 <p><strong>Gracias ${nombre}</strong></p>
-                                <p>📧 <strong>Email enviado exitosamente a tsport945@gmail.com</strong></p>
-                                <p>Te contactaremos pronto al correo:</p>
-                                <p><strong>${correo}</strong></p>
-                                <p>O al teléfono:</p>
-                                <p><strong>${telefono}</strong></p>
+                                <p>📧 <strong>Email enviado exitosamente</strong></p>
+                                <p>Te contactaremos pronto al:</p>
+                                <p><strong>📧 ${correo}</strong></p>
+                                <p><strong>📱 ${telefono}</strong></p>
                                 <p>Total del pedido: <strong>Bs. ${total.toFixed(2)}</strong></p>
-                                <p>🛒 <strong>Redirigiendo al pago...</strong></p>
+                                <p>🛍️ <strong>Productos enviados con características completas</strong></p>
                             </div>
                         `,
                         icon: 'success',
@@ -914,7 +997,8 @@
                         color: 'var(--color-texto)',
                         confirmButtonColor: 'var(--color-primario)'
                     }).then(() => {
-                        // REDIRIGIR A LA PÁGINA DE PAGO
+                        // Limpiar carrito y redirigir
+                        localStorage.removeItem('productos-en-carrito');
                         window.location.href = 'pago.html';
                     });
                 })
@@ -927,6 +1011,7 @@
                             <div style="text-align: left;">
                                 <p><strong>Lo sentimos ${nombre}</strong></p>
                                 <p>⚠ <strong>Hubo un error al enviar el mensaje.</strong></p>
+                                <p>Detalles del error: ${error.text || 'Error desconocido'}</p>
                                 <p>Por favor, intenta nuevamente o contáctanos directamente:</p>
                                 <p><strong>WhatsApp: +591 63199147</strong></p>
                             </div>
@@ -940,7 +1025,76 @@
                 });
         }
 
-        // ==================== FUNCIONALIDAD DE MODALES ====================
+        // EVENTO SUBMIT DEL FORMULARIO
+        document.getElementById('formularioCompra').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.querySelector('input[name="user_name"]').value;
+            const correo = document.querySelector('input[name="user_email"]').value;
+            const telefono = document.querySelector('input[name="user_phone"]').value;
+            const comentario = document.querySelector('textarea[name="message"]').value;
+            const productos = JSON.parse(localStorage.getItem('productos-en-carrito')) || [];
+            
+            console.log("📝 Datos del formulario:", { nombre, correo, telefono, comentario });
+            console.log("🛒 Productos en carrito:", productos);
+            
+            if (!validarProductosFormulario()) return;
+            if (!validarFormularioCompleto(nombre, correo, telefono)) return;
+            
+            // Mostrar confirmación con todos los detalles
+            let productosHTML = productos.map(p => {
+                let caracteristicas = '';
+                
+                // Manejar selecciones del modal
+                if (p.seleccion) {
+                    if (p.seleccion.talla) caracteristicas += ` Talla: ${p.seleccion.talla}`;
+                    if (p.seleccion.color) {
+                        const colorNombre = p.seleccion.color.nombre || p.seleccion.color;
+                        caracteristicas += ` Color: ${colorNombre}`;
+                    }
+                }
+
+                // Manejar características adicionales
+                if (p.caracteristicas && Array.isArray(p.caracteristicas)) {
+                    p.caracteristicas.forEach(caracteristica => {
+                        caracteristicas += ` ${caracteristica.titulo}: ${caracteristica.descripcion}`;
+                    });
+                }
+
+                return `<li>${p.titulo}${caracteristicas ? ` (${caracteristicas.trim()})` : ''} - x${p.cantidad} - Bs. ${(p.precio * p.cantidad).toFixed(2)}</li>`;
+            }).join('');
+            
+            const total = productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+            
+            Swal.fire({
+                title: '¿Confirmar pedido T-SPORT?',
+                html: `
+                    <div style="text-align: left;">
+                        <p><strong>📦 Productos:</strong></p>
+                        <ul>${productosHTML}</ul>
+                        <p><strong>💰 Total: Bs. ${total.toFixed(2)}</strong></p>
+                        <p><strong>👤 Nombre:</strong> ${nombre}</p>
+                        <p><strong>📧 Email:</strong> ${correo}</p>
+                        <p><strong>📱 Teléfono:</strong> ${telefono}</p>
+                        <p><strong>💬 Comentarios:</strong> ${comentario || 'Ninguno'}</p>
+                    </div>
+                `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, confirmar',
+                cancelButtonText: 'Revisar',
+                background: 'var(--color-secundario)',
+                color: 'var(--color-texto)',
+                confirmButtonColor: 'var(--color-primario)',
+                cancelButtonColor: 'var(--color-error)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    enviarPedido(nombre, correo, telefono, comentario);
+                }
+            });
+        });
+
+        // FUNCIONALIDAD DE MODALES
         function abrirModalPago() {
             document.getElementById('modalPago').classList.add('mostrar');
         }
@@ -981,8 +1135,10 @@
         // INICIALIZAR
         document.addEventListener('DOMContentLoaded', function() {
             crearParticulas();
-            console.log("📝 Formulario T-SPORT cargado con efectos visuales");
-            console.log("📧 EmailJS configurado para: tsport945@gmail.com");
+            cargarResumenPedido();
+            console.log("📝 Formulario T-SPORT cargado correctamente");
+            console.log("📧 EmailJS configurado");
+            console.log("📱 Variables corregidas: user_name, user_email, user_phone");
         });
     </script>
 </body>
